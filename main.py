@@ -111,6 +111,7 @@ def main():
 Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.
 """)
 
+def upload_photo(photo):
     # Image uploader
     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
 
@@ -118,15 +119,15 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 
     for perc_completed in range(100):
         time.sleep(0.05)
-    progress_bar.progress(perc_completed+1)
+        progress_bar.progress(perc_completed+1)
 
-    st.success("Photo uploaded successfully!")
+    st.image(Image.open(photo))
+
+    return photo
 
     # Display uploaded photo and run analysis
     if photo:
-        st.image(Image.open(photo))
-        with st.spinner("Uploading image..."):
-            st.write("Valid image uploaded")
+        
         with st.spinner("Doing technical analysis..."):
             encoded_image, media_type = encode_img(photo)
             chart = is_chart(encoded_image, media_type)
@@ -147,26 +148,11 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 if __name__ == "__main__":
     main()
 
-
-# import streamlit as st
-# mport time
-
-# col1, col2, col3 = st.columns((1,2,1))
-
-# col1.markdown("# Welcome to my app! ")
-# col1.markdown(" Here is some info on the app. ")
-
-# uploaded_photo = col2.file_uploader("Upload a photo")
-# camera_photo = col2.camera_input("Take a photo")
-
-# progress_bar = st.progress(0)
-
-# for perc_completed in range(100):
-# time.sleep(0.05)
-# progress_bar.progress(perc_completed+1)
-
-# st.success("Photo uploaded successfully!")
-
+"""
+git add . 
+git commit -m "v0.1" 
+git push origin master
+"""
 
 
 # import os
