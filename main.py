@@ -118,6 +118,7 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
     # Image uploader
     with st.spinner("Uploading image..."):
         photo = st.file_uploader("", type=["jpg", "jpeg", "png"])
+    st.success('Done!')    
 
     # Display uploaded photo
     if photo:
