@@ -1,12 +1,17 @@
 ### streamlit run main.py
 
+import os
 import streamlit as st
 import anthropic
 import base64
 from PIL import Image
+import requests
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
 client = anthropic.Anthropic()
+# Bot token from env
+bot_token = os.environ['BOT_TOKEN']
+
 
 def encode_img(photo):
     image_data = photo.getvalue()
@@ -80,11 +85,32 @@ def analyze_img(encoded_image, media_type):
         return str(response)
     else:
         return "No image uploaded."
-
-def save_response(response):
-    with open("responses.txt", "a") as file:
-        file.write(response + "\n")
     
+
+def resp_to_telegram(response, photo):
+    # Send the photo first
+    photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+    files = {"photo": photo.getvalue()}
+    payload = {"chat_id": "-4161262764"}
+    photo_response = requests.post(photo_url, data=payload, files=files)
+    
+    if photo_response.status_code == 200:
+        # If photo sent successfully, send the text
+        text_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        payload = {
+            "chat_id": "-4161262764",
+            "text": response
+        }
+        text_response = requests.post(text_url, json=payload)
+        
+        if text_response.status_code == 200:
+            st.success("Response and image sent to Telegram successfully!")
+        else:
+            st.error(f"Error sending text to Telegram: {text_response.text}")
+    else:
+        st.error(f"Error sending photo to Telegram: {photo_response.text}")
+
+
 def main():
     # Page title
     st.title("Opinionated Intelligence")
@@ -110,9 +136,9 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
         chart = is_chart(encoded_image, media_type)
         if chart == 'YES':
             response = analyze_img(encoded_image, media_type)  
-            # Save the response to the file
-            save_response(response)     
-            
+
+            resp_to_telegram(response, photo) 
+
             st.subheader("Response:")
             st.write(response)
         else : 
