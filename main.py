@@ -57,7 +57,7 @@ def analyze_img(encoded_image, media_type):
             model="claude-3-haiku-20240307",
             # model="claude-3-sonnet-20240229",
             # model="claude-3-opus-20240229",
-            max_tokens=4000,
+            max_tokens=2500,
             temperature=0,
             system="<context>Technical analysis</context>\n\ntask>Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis, without considering any information other than what's visible on the chart.</task>",
             messages=[
