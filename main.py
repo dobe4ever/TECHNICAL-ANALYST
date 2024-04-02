@@ -81,6 +81,9 @@ def analyze_img(encoded_image, media_type):
     else:
         return "No image uploaded."
 
+def save_response(response):
+    with open("responses.txt", "a") as file:
+        file.write(response + "\n")
     
 def main():
     # Page title
@@ -106,7 +109,10 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
         encoded_image, media_type = encode_img(photo)
         chart = is_chart(encoded_image, media_type)
         if chart == 'YES':
-            response = analyze_img(encoded_image, media_type)       
+            response = analyze_img(encoded_image, media_type)  
+            # Save the response to the file
+            save_response(response)     
+            
             st.subheader("Response:")
             st.write(response)
         else : 
