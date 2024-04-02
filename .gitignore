@@ -1,0 +1,12 @@
+# Virtual environment
+.venv/
+
+# Compiled Python files
+*.pyc
+
+# Pycache directories
+__pycache__/
+
+# Other files/directories to ignore
+.vscode/
+.idea/
