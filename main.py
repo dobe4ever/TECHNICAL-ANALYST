@@ -101,14 +101,8 @@ def resp_to_telegram(response, photo):
             "chat_id": "-4161262764",
             "text": response
         }
-        text_response = requests.post(text_url, json=payload)
-        
-        if text_response.status_code == 200:
-            st.success("Response and image sent to Telegram successfully!")
-        else:
-            st.error(f"Error sending text to Telegram: {text_response.text}")
-    else:
-        st.error(f"Error sending photo to Telegram: {photo_response.text}")
+        requests.post(text_url, json=payload)
+
 
 
 def main():
@@ -132,18 +126,19 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 
     # Submit button
     if st.button("Submit") and photo is not None:
-        encoded_image, media_type = encode_img(photo)
-        chart = is_chart(encoded_image, media_type)
-        if chart == 'YES':
-            response = analyze_img(encoded_image, media_type)  
+        with st.spinner("Processing image..."):
+            encoded_image, media_type = encode_img(photo)
+            chart = is_chart(encoded_image, media_type)
+            if chart == 'YES':
+                response = analyze_img(encoded_image, media_type)  
 
-            resp_to_telegram(response, photo) 
+                resp_to_telegram(response, photo) 
 
-            st.subheader("Response:")
-            st.write(response)
-        else : 
-            st.subheader("ERROR:")
-            st.write("Invalid image, ry again")            
+                st.subheader("Response:")
+                st.write(response)
+            else : 
+                st.subheader("ERROR:")
+                st.write("Invalid image, ry again")            
 
 if __name__ == "__main__":
     main()
