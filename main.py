@@ -1,5 +1,6 @@
 # ### streamlit run main.py
 import os
+import time
 import streamlit as st
 import anthropic
 import base64
@@ -10,6 +11,9 @@ import requests
 client = anthropic.Anthropic()
 # Bot token from env
 bot_token = os.environ['BOT_TOKEN']
+
+photo = None
+
 
 def encode_img(photo):
     image_data = photo.getvalue()
@@ -110,6 +114,14 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
     # Image uploader
     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
 
+    progress_bar = st.progress(0)
+
+    for perc_completed in range(100):
+        time.sleep(0.05)
+    progress_bar.progress(perc_completed+1)
+
+    st.success("Photo uploaded successfully!")
+
     # Display uploaded photo and run analysis
     if photo:
         st.image(Image.open(photo))
@@ -120,10 +132,13 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
             chart = is_chart(encoded_image, media_type)
             if chart == 'YES':
                 response = analyze_img(encoded_image, media_type)
+
                 resp_to_telegram(response, photo)
+
                 st.success("Technical analysis complete!")
                 st.subheader("Response:")
                 st.write(response)
+
             else:
                 st.error("Invalid image, try again")
     else:
@@ -131,6 +146,29 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 
 if __name__ == "__main__":
     main()
+
+
+import streamlit as st
+mport time
+
+col1, col2, col3 = st.columns((1,2,1))
+
+col1.markdown("# Welcome to my app! ")
+col1.markdown(" Here is some info on the app. ")
+
+uploaded_photo = col2.file_uploader("Upload a photo")
+camera_photo = col2.camera_input("Take a photo")
+
+progress_bar = st.progress(0)
+
+for perc_completed in range(100):
+time.sleep(0.05)
+progress_bar.progress(perc_completed+1)
+
+st.success("Photo uploaded successfully!")
+
+
+
 # import os
 # import streamlit as st
 # import anthropic
