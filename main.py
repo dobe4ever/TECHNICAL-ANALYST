@@ -116,31 +116,31 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 """)
 
     # Image uploader
-    with st.spinner("Uploading image..."):
-        photo = st.file_uploader("upload image", type=["jpg", "jpeg", "png"])
-    st.success('Done!')    
+    photo = st.file_uploader("upload image", type=["jpg", "jpeg", "png"])
+
 
     # Display uploaded photo
     if photo:
-        img = Image.open(photo)
+        with st.spinner("Uploading image..."):
+            img = Image.open(photo)    
         st.image(img)
+        st.button("Submit")
 
     # Submit button
     if st.button("Submit"):
-        if photo is not None:
-            with st.spinner("Processing image..."):
-                encoded_image, media_type = encode_img(photo)
-                chart = is_chart(encoded_image, media_type)
-                if chart == 'YES':
-                    response = analyze_img(encoded_image, media_type)
-                    resp_to_telegram(response, photo)
-                    st.subheader("Response:")
-                    st.write(response)
-                else:
-                    st.subheader("ERROR:")
-                    st.write("Invalid image, try again")
-        else:
-            st.error("Please upload an image first.")     
+        with st.spinner("Processing image..."):
+            encoded_image, media_type = encode_img(photo)
+            chart = is_chart(encoded_image, media_type)
+            if chart == 'YES':
+                response = analyze_img(encoded_image, media_type)
+                resp_to_telegram(response, photo)
+                st.subheader("Response:")
+                st.write(response)
+            else:
+                st.subheader("ERROR:")
+                st.write("Invalid image, try again")
+    else:
+        st.error("Please upload an image first.")     
 
 if __name__ == "__main__":
     main()
