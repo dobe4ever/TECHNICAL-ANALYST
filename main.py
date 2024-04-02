@@ -114,10 +114,10 @@ def main():
              
 Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.
 """)
+
     # Image uploader
-    photo = st.file_uploader(
-        "", type=["jpg", "jpeg", "png"]
-    )
+    with st.spinner("Uploading image..."):
+        photo = st.file_uploader("", type=["jpg", "jpeg", "png"])
 
     # Display uploaded photo
     if photo:
