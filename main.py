@@ -54,9 +54,9 @@ def is_chart(encoded_image, media_type):
 def analyze_img(encoded_image, media_type):
     if encoded_image:
         message = client.messages.create(
-            # model="claude-3-haiku-20240307",
+            model="claude-3-haiku-20240307",
             # model="claude-3-sonnet-20240229",
-            model="claude-3-opus-20240229",
+            # model="claude-3-opus-20240229",
             max_tokens=4000,
             temperature=0,
             system="<context>Technical analysis</context>\n\ntask>Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis, without considering any information other than what's visible on the chart.</task>",
