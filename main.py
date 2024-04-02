@@ -148,9 +148,10 @@ def upload_photo(photo):
 if __name__ == "__main__":
     main()
 
-"""
+g="""
 git add . 
 git commit -m "v0.1" 
+
 git push origin master
 """
 
