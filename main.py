@@ -12,20 +12,38 @@ client = anthropic.Anthropic()
 # Bot token from env
 bot_token = os.environ['BOT_TOKEN']
 
+# Reset photo data
 photo = None
 
 
+def get_photo(photo):
+    if photo:
+        progress_bar = st.progress(0)
+
+        for perc_completed in range(100):
+            time.sleep(0.05)
+            progress_bar.progress(perc_completed+1)
+            # Display uploaded photo and run analysis
+            st.image(Image.open(photo))
+
+            return photo
+        
+    else: return photo    
+
+
 def encode_img(photo):
-    image_data = photo.getvalue()
-    encoded_image = base64.b64encode(image_data).decode()
-    file_extension = photo.name.split(".")[-1].lower()
-    if file_extension in ["jpg", "jpeg"]:
-        media_type = "image/jpeg"
-    elif file_extension == "png":
-        media_type = "image/png"
-    else:
-        media_type = None
-    return encoded_image, media_type
+    if photo:
+        image_data = photo.getvalue()
+        encoded_image = base64.b64encode(image_data).decode()
+        file_extension = photo.name.split(".")[-1].lower()
+        if file_extension in ["jpg", "jpeg"]:
+            media_type = "image/jpeg"
+        elif file_extension == "png":
+            media_type = "image/png"
+        else:
+            media_type = None
+        return encoded_image, media_type
+
 
 def is_chart(encoded_image, media_type):
     if encoded_image:
@@ -103,47 +121,33 @@ def resp_to_telegram(response, photo):
         requests.post(text_url, json=payload)
 
 def main():
-    # Page title
-    st.title("Opinionated Intelligence")
-    st.write("""
-### Upload any chart
-
-Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.
-""")
-
-def upload_photo(photo):
+    # Page text
+    st.markdown("## Opinionated Intelligence\n### Upload any chart")
+    st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
+    
     # Image uploader
     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
+    
+    # display image
+    get_photo(photo)
 
-    progress_bar = st.progress(0)
+    # run
+    with st.spinner("Doing technical analysis..."):
+        # encode image
+        encoded_image, media_type = encode_img(photo)
+        # validate image
+        chart = is_chart(encoded_image, media_type)
+        if chart == 'YES':
+            # analyze image
+            response = analyze_img(encoded_image, media_type)
+            # send data to telegram
+            resp_to_telegram(response, photo)
+            # Display response
+            st.success("### Response:")
+            st.markdown(response)
 
-    for perc_completed in range(100):
-        time.sleep(0.05)
-        progress_bar.progress(perc_completed+1)
-
-    st.image(Image.open(photo))
-
-    return photo
-
-    # Display uploaded photo and run analysis
-    if photo:
-        
-        with st.spinner("Doing technical analysis..."):
-            encoded_image, media_type = encode_img(photo)
-            chart = is_chart(encoded_image, media_type)
-            if chart == 'YES':
-                response = analyze_img(encoded_image, media_type)
-
-                resp_to_telegram(response, photo)
-
-                st.success("Technical analysis complete!")
-                st.subheader("Response:")
-                st.write(response)
-
-            else:
-                st.error("Invalid image, try again")
-    else:
-        st.info("Please upload an image to get started.")
+        else:
+            st.error("Invalid image, try again")
 
 if __name__ == "__main__":
     main()
