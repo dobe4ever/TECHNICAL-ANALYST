@@ -8,7 +8,6 @@ from io import BytesIO
 
 from claude import is_chart, analyze_img
 from utils import encode_img, data_to_telegram
-from voice import text_to_parags, parags_to_speech
 
 def main():
     # Page title
@@ -31,21 +30,12 @@ def main():
                 data_to_telegram(response, photo)
                 st.success("Success!")
                 st.markdown("### Response:")
-
-                if st.button("Play voice"):
-                    if response:
-                        parags = text_to_parags(response)
-                        output_audio = parags_to_speech(parags)
-
-                        # Create a BytesIO object from the audio data
-                        audio_data = BytesIO(output_audio)
-
-                        # Display the audio player
-                        st.audio(audio_data, format='audio/mp3')
-
                 st.markdown(response)
             else:
                 st.error("Only technical analysis charts accepted, try again.")
+            
+
+
     else:
         st.info("Please upload an image to get started.")
 
