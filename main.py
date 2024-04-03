@@ -16,21 +16,20 @@ bot_token = os.environ['BOT_TOKEN']
 photo = None
 
 def encode_img(photo):
-    if photo:
-        image_data = photo.getvalue()
-        file_extension = photo.name.split(".")[-1].lower()
-        encoded_image = base64.b64encode(image_data).decode()
+    image_data = photo.getvalue()
+    file_extension = photo.name.split(".")[-1].lower()
+    encoded_image = base64.b64encode(image_data).decode()
 
-        if file_extension in ["jpg", "jpeg"]:
-            media_type = "image/jpeg"
+    if file_extension in ["jpg", "jpeg"]:
+        media_type = "image/jpeg"
 
-        elif file_extension == "png":
-            media_type = "image/png"
+    elif file_extension == "png":
+        media_type = "image/png"
 
-        else:
-            media_type = None
+    else:
+        media_type = None
 
-        return encoded_image, media_type
+    return encoded_image, media_type
 
 
 def is_chart(encoded_image, media_type):
@@ -124,21 +123,22 @@ def main():
         # Display uploaded photo and run analysis
         st.image(Image.open(photo))
 
-        # encode image
-        encoded_image, media_type = encode_img(photo)
-        # validate image
-        chart = is_chart(encoded_image, media_type)
-        if chart == 'YES':
-            # analyze image
-            response = analyze_img(encoded_image, media_type)
-            # send data to telegram
-            resp_to_telegram(response, photo)
+        if photo:
+            # encode image
+            encoded_image, media_type = encode_img(photo)
+            # validate image
+            chart = is_chart(encoded_image, media_type)
+            if chart == 'YES':
+                # analyze image
+                response = analyze_img(encoded_image, media_type)
+                # send data to telegram
+                resp_to_telegram(response, photo)
 
-            # Display response
-            st.success("### Response:")
-            st.markdown(response)
-        else:
-            st.error("Invalid image, try again")
+                # Display response
+                st.success("### Response:")
+                st.markdown(response)
+            else:
+                st.error("Invalid image, try again")
 
     st.success("Done!")
 
