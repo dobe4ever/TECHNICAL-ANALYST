@@ -131,8 +131,10 @@ def main():
             encoded_image, media_type = encode_img(photo)
             response = analyze_img(encoded_image, media_type)
             
-    st.subheader("Response")
-    st.write(response)
+            st.subheader("Response")
+            st.write(response)
+
+    st.success("Done!")        
 
 if __name__ == "__main__":
     main()
