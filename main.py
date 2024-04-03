@@ -118,10 +118,16 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 
     # Image uploader
     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
+    progress_bar = st.progress(0)
 
-    # Display uploaded photo and run analysis
-    if photo:
-        st.image(Image.open(photo))
+    for perc_completed in range(100):
+        time.sleep(0.05)
+        progress_bar.progress(perc_completed+1)
+
+        # Display uploaded photo and run analysis
+        # if photo:
+        with st.spinner("Uploading..."):
+            st.image(Image.open(photo))
         with st.spinner("Uploading image..."):
             st.write("Valid image uploaded")
         with st.spinner("Doing technical analysis..."):
@@ -130,13 +136,14 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
             if chart == 'YES':
                 response = analyze_img(encoded_image, media_type)
                 data_to_telegram(response, photo)
-                st.success("Technical analysis complete!")
-                st.subheader("Response:")
+                st.success("Success!")
                 st.write(response)
             else:
                 st.error("Invalid image, try again")
-    else:
-        st.info("Please upload an image to get started.")
+        # else:
+        #     st.info("Please upload an image to get started.")
+                
+    st.success("Photo uploaded successfully!")
 
 if __name__ == "__main__":
     main()
