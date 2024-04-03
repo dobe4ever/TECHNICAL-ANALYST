@@ -10,8 +10,7 @@ from utils import encode_img, data_to_telegram
 def main():
     # Page title
     st.markdown("## Opinionated Intelligence")
-    st.markdown("### Upload any chart\\n\\nInclude or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
-
+    st.markdown("### Upload any chart\n\nInclude or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
     # Initialize session state variables
     if "image" not in st.session_state:
         st.session_state.image = None
