@@ -4,13 +4,37 @@ import anthropic
 client = anthropic.Anthropic()
 
 
+is_chart_prompt = """
+<context> Image classification </context>
+
+<task>
+Only respond "YES" or "NO" (Without quotes)
+
+Is the image provided one of the following charts:
+
+-- Candlestick
+-- Bar
+-- Line
+-- A chart where technical analysis can be performed
+</task>
+"""
+            
+
+analyze_img_prompt = """
+<context> Technical analysis </context>
+
+<task>
+Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis concepts, and only considering without considering the available information visible on the given chart.
+</task> """
+
+
 def is_chart(encoded_image, media_type):
     if encoded_image:
         message = client.messages.create(
             model="claude-3-haiku-20240307",
             max_tokens=10,
             temperature=0,
-            system="<context>\nImage classification\n</context>\n\n<task>\nOnly respond \"YES\" or \"NO\" (Without quotes)\n\nIs the image provided one of the following charts:\n\nCandlestick\nBar\nLine\nPoint and Figure\nRenko\nKagi\nEquivolume\nTick\nA chart where technical analysis can be performed\n</task>",
+            system=is_chart_prompt,
             messages=[
                 {
                     "role": "user",
@@ -39,9 +63,9 @@ def analyze_img(encoded_image, media_type):
             model="claude-3-haiku-20240307",
             # model="claude-3-sonnet-20240229",
             # model="claude-3-opus-20240229",
-            max_tokens=2500,
+            max_tokens=3000,
             temperature=0,
-            system="<context>Technical analysis</context>\n\ntask>Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis, without considering any information other than what's visible on the chart.</task>",
+            system=analyze_img_prompt,
             messages=[
                 {
                     "role": "user",

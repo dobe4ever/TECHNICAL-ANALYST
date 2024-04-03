@@ -51,15 +51,3 @@ if __name__ == "__main__":
     main()
     
 ### streamlit run main.py
-    
-
-
-g="""
-git add . 
-
-git commit -m "v0.1" 
-
-git push origin master
-"""
-    
-### streamlit run main.py
