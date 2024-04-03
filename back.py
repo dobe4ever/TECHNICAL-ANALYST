@@ -109,8 +109,12 @@ def data_to_telegram(response, photo):
 
 def main():
     # Page title
-    st.markdown("## Opinionated Intelligence")
-    st.markdown("### Upload any chart\n\nInclude or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
+    st.title("Opinionated Intelligence")
+    st.write("""
+### Upload any chart
+
+Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.
+""")
 
     # Image uploader
     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
@@ -127,8 +131,8 @@ def main():
                 response = analyze_img(encoded_image, media_type)
                 data_to_telegram(response, photo)
                 st.success("Success!")
-                st.markdown("### Response:")
-                st.markdown(response)
+                st.subheader("Response:")
+                st.write(response)
             else:
                 st.error("Invalid image, try again")
     else:
