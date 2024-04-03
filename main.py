@@ -118,16 +118,10 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
 
     # Image uploader
     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
-    progress_bar = st.progress(0)
 
-    for perc_completed in range(100):
-        time.sleep(0.05)
-        progress_bar.progress(perc_completed+1)
-
-        # Display uploaded photo and run analysis
-        # if photo:
-        with st.spinner("Uploading..."):
-            st.image(Image.open(photo))
+    # Display uploaded photo and run analysis
+    if photo:
+        st.image(Image.open(photo))
         with st.spinner("Uploading image..."):
             st.write("Valid image uploaded")
         with st.spinner("Doing technical analysis..."):
@@ -136,14 +130,13 @@ Include or exclude elements like indicators, timeframes, drawings or asset name 
             if chart == 'YES':
                 response = analyze_img(encoded_image, media_type)
                 data_to_telegram(response, photo)
-                st.success("Success!")
+                st.success("Technical analysis complete!")
+                st.subheader("Response:")
                 st.write(response)
             else:
                 st.error("Invalid image, try again")
-        # else:
-        #     st.info("Please upload an image to get started.")
-                
-    st.success("Photo uploaded successfully!")
+    else:
+        st.info("Please upload an image to get started.")
 
 if __name__ == "__main__":
     main()
@@ -158,70 +151,5 @@ git commit -m "v0.1"
 
 git push origin master
 """
-### streamlit run main.py
-
-# def main():
-#     # Page text
-#     st.markdown("## Opinionated Intelligence\n### Upload any chart")
-#     st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
-    
-#     # Image uploader
-#     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
-    
-#     progress_bar = st.progress(0)
-#     for perc_completed in range(100):
-#         time.sleep(0.05)
-#         progress_bar.progress(perc_completed+1)
-
-#         # Display uploaded photo
-#         if photo:
-#             img = Image.open(photo)
-#             st.image(img)
-
-#             encoded_image, media_type = encode_img(photo)
-
-#             is_chart(encoded_image, media_type)
-            
-#             response = analyze_img(encoded_image, media_type)
-            
-#             data_to_telegram(response, photo)
-
-#             st.subheader("Claude's Response")
-#             st.write(response)
-
-
-
-# if __name__ == "__main__":
-#     main()
-   
-# def main():
-#     # Page text
-#     st.markdown("## Opinionated Intelligence\n### Upload any chart")
-#     st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
-#     # Image uploader
-#     photo = st.file_uploader(
-#         "Upload Chart", type=["jpg", "jpeg", "png"]
-#     )
-
-#     progress_bar = st.progress(0)
-#     for perc_completed in range(100):
-#         time.sleep(0.05)
-#         progress_bar.progress(perc_completed+1)
-
-#         # Display uploaded photo
-#         if photo:
-#             img = Image.open(photo)
-#             st.image(img)
-
-#         # Submit button
-#         if photo is not None:
-#             encoded_image, media_type = encode_img(photo)
-#             response = analyze_img(encoded_image, media_type)
-            
-#             st.subheader("Response")
-#             st.write(response)
-
-# if __name__ == "__main__":
-#     main()
     
 ### streamlit run main.py
