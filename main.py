@@ -108,33 +108,35 @@ def data_to_telegram(response, photo):
 
 
 def main():
-    # Page text
-    st.markdown("## Opinionated Intelligence\n### Upload any chart")
-    st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
+    # Page title
+    st.title("Opinionated Intelligence")
+    st.write("""
+### Upload any chart
+
+Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.
+""")
+
     # Image uploader
-    photo = st.file_uploader(
-        "Upload Chart", type=["jpg", "jpeg", "png"]
-    )
+    photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
 
-    progress_bar = st.progress(0)
-    for perc_completed in range(100):
-        time.sleep(0.05)
-        progress_bar.progress(perc_completed+1)
-
-        # Display uploaded photo
-        if photo:
-            img = Image.open(photo)
-            st.image(img)
-
-        # Submit button
-        if photo is not None:
+    # Display uploaded photo and run analysis
+    if photo:
+        st.image(Image.open(photo))
+        with st.spinner("Uploading image..."):
+            st.write("Valid image uploaded")
+        with st.spinner("Doing technical analysis..."):
             encoded_image, media_type = encode_img(photo)
-            response = analyze_img(encoded_image, media_type)
-            
-            st.subheader("Response")
-            st.write(response)
-
-    st.success("Done!")        
+            chart = is_chart(encoded_image, media_type)
+            if chart == 'YES':
+                response = analyze_img(encoded_image, media_type)
+                data_to_telegram(response, photo)
+                st.success("Technical analysis complete!")
+                st.subheader("Response:")
+                st.write(response)
+            else:
+                st.error("Invalid image, try again")
+    else:
+        st.info("Please upload an image to get started.")
 
 if __name__ == "__main__":
     main()
