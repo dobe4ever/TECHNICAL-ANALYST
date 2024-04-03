@@ -118,8 +118,8 @@ def main():
     # Display uploaded photo and run analysis
     if photo:
         st.image(Image.open(photo))
-        with st.spinner("Uploading image..."):
-            st.write("Valid image uploaded")
+        # with st.spinner("Uploading image..."):
+        #     st.write("Valid image uploaded")
         with st.spinner("Doing technical analysis..."):
             encoded_image, media_type = encode_img(photo)
             chart = is_chart(encoded_image, media_type)
