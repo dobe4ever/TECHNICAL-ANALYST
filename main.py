@@ -9,11 +9,9 @@ import requests
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
 client = anthropic.Anthropic()
+
 # Bot token from env
 bot_token = os.environ['BOT_TOKEN']
-
-# Reset photo data
-photo = None
 
 def encode_img(photo):
     image_data = photo.getvalue()
@@ -91,21 +89,6 @@ def analyze_img(encoded_image, media_type):
     else:
         return "No image uploaded."
 
-def resp_to_telegram(response, photo):
-    # Send the photo first
-    photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
-    files = {"photo": photo.getvalue()}
-    payload = {"chat_id": "-4161262764"}
-    photo_response = requests.post(photo_url, data=payload, files=files)
-
-    if photo_response.status_code == 200:
-        # If photo sent successfully, send the text
-        text_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        payload = {
-            "chat_id": "-4161262764",
-            "text": response
-        }
-        requests.post(text_url, json=payload)
 
 def data_to_telegram(response, photo):
     # Send the photo first
@@ -128,10 +111,11 @@ def main():
     # Page text
     st.markdown("## Opinionated Intelligence\n### Upload any chart")
     st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
-    
     # Image uploader
-    photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
-    
+    photo = st.file_uploader(
+        "Upload Chart", type=["jpg", "jpeg", "png"]
+    )
+
     progress_bar = st.progress(0)
     for perc_completed in range(100):
         time.sleep(0.05)
@@ -142,21 +126,19 @@ def main():
             img = Image.open(photo)
             st.image(img)
 
+        # Submit button
+        if photo is not None:
             encoded_image, media_type = encode_img(photo)
-
-            is_chart(encoded_image, media_type)
-            
             response = analyze_img(encoded_image, media_type)
             
-            data_to_telegram(response, photo)
-
-            st.subheader("Claude's Response")
+            st.subheader("Response")
             st.write(response)
-
-
 
 if __name__ == "__main__":
     main()
+    
+### streamlit run main.py
+    
 
 g="""
 git add . 
@@ -166,3 +148,69 @@ git commit -m "v0.1"
 git push origin master
 """
 # ### streamlit run main.py
+
+def main():
+#     # Page text
+#     st.markdown("## Opinionated Intelligence\n### Upload any chart")
+#     st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
+    
+#     # Image uploader
+#     photo = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
+    
+#     progress_bar = st.progress(0)
+#     for perc_completed in range(100):
+#         time.sleep(0.05)
+#         progress_bar.progress(perc_completed+1)
+
+#         # Display uploaded photo
+#         if photo:
+#             img = Image.open(photo)
+#             st.image(img)
+
+#             encoded_image, media_type = encode_img(photo)
+
+#             is_chart(encoded_image, media_type)
+            
+#             response = analyze_img(encoded_image, media_type)
+            
+#             data_to_telegram(response, photo)
+
+#             st.subheader("Claude's Response")
+#             st.write(response)
+
+
+
+# if __name__ == "__main__":
+#     main()
+   
+# def main():
+#     # Page text
+#     st.markdown("## Opinionated Intelligence\n### Upload any chart")
+#     st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
+#     # Image uploader
+#     photo = st.file_uploader(
+#         "Upload Chart", type=["jpg", "jpeg", "png"]
+#     )
+
+#     progress_bar = st.progress(0)
+#     for perc_completed in range(100):
+#         time.sleep(0.05)
+#         progress_bar.progress(perc_completed+1)
+
+#         # Display uploaded photo
+#         if photo:
+#             img = Image.open(photo)
+#             st.image(img)
+
+#         # Submit button
+#         if photo is not None:
+#             encoded_image, media_type = encode_img(photo)
+#             response = analyze_img(encoded_image, media_type)
+            
+#             st.subheader("Response")
+#             st.write(response)
+
+# if __name__ == "__main__":
+#     main()
+    
+### streamlit run main.py
