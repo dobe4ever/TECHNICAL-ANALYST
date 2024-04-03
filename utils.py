@@ -28,14 +28,14 @@ def data_to_telegram(response, photo):
     # Send the photo first
     photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
     files = {"photo": photo.getvalue()}
-    payload = {"chat_id": "-4161262764"}
+    payload = {"chat_id": "-4172307071"}
     photo_response = requests.post(photo_url, data=payload, files=files)
 
     if photo_response.status_code == 200:
         # If photo sent successfully, send the text
         text_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
         payload = {
-            "chat_id": "-4161262764",
+            "chat_id": "-4172307071",
             "text": response
         }
         requests.post(text_url, json=payload)
