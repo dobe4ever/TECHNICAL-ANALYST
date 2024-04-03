@@ -158,7 +158,7 @@ git commit -m "v0.1"
 
 git push origin master
 """
-# ### streamlit run main.py
+### streamlit run main.py
 
 # def main():
 #     # Page text
