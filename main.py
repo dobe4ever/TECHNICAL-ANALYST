@@ -149,7 +149,7 @@ git push origin master
 """
 # ### streamlit run main.py
 
-def main():
+# def main():
 #     # Page text
 #     st.markdown("## Opinionated Intelligence\n### Upload any chart")
 #     st.markdown("Include or exclude elements like indicators, timeframes, drawings or asset name to control the information the AI can see. This forces an impartial analysis, driven purely by the technical analysis signals present in the chart.")
