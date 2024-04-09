@@ -20,13 +20,15 @@ Is the image provided one of the following charts:
 """
             
 
-analyze_img_prompt = """
-<context> Technical analysis </context>
+# analyze_img_prompt = """
+# <context> Technical analysis </context>
 
-<task>
-Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis concepts, and only considering without considering the available information visible on the given chart.
-</task> """
+# <task>
+# Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis concepts, and only considering without considering the available information visible on the given chart.
+# </task> """
 
+
+analyze_img_prompt = """ <context> Technical analysis reading </context> <role> You are a professional image captioner </role> <task> Please narrate this chart as if you were describing it to a vision-impaired person. Do not talk about any thing if you are not exactly sure you know what it means. Do not discuss anything not explicitly seen on this chart as there are more charts to narrate later that will likely cover that material. Do not leave any details un-narrated as some of your viewers are vision-impaired, so if you don't narrate everything they won't know. </task> Use excruciating detail. Put your narration in <narration> tags."""
 
 def is_chart(encoded_image, media_type):
     if encoded_image:
