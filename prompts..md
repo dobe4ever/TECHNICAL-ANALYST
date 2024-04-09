@@ -66,4 +66,14 @@ Here is the transcript:
 
 prompt1 = """ <context> Technical analysis reading </context> <role> You are a professional image captioner </role> <task> Please narrate this chart as if you were describing it to a vision-impaired person. Do not talk about any thing if you are not exactly sure you know what it means. Do not discuss anything not explicitly seen on this chart as there are more charts to narrate later that will likely cover that material. Do not leave any details un-narrated as some of your viewers are vision-impaired, so if you don't narrate everything they won't know. </task> Use excruciating detail. Put your narration in <narration> tags."""
 
-prompt2 = """ <context> Technical analysis reading </context> <role> You are an expert financial analyst and trader, analyzing a transcript of an asset's chart. </role> <task> Based on the detailed chart narration provided in the <transcript> section, please provide a thorough technical analysis assessment of the asset's price movements, trends, and potential future behavior. Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive evaluation. </task> <transcript> {narration} </transcript>"""
+prompt = """ 
+<context> 
+Technical analysis & trading 
+</context> 
+<role> 
+You are an expert technical analyst and trader, reading & interpreting charts. 
+</role> 
+<task> 
+Based on the technical details in the provided chart, please provide a thorough technical analysis assessment of the asset's price action, trends, and potential future behavior. Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive evaluation. Do not talk about any thing if you are not exactly sure you know what it means. Do not discuss anything not explicitly seen on this chart as there are more charts to narrate later that will likely cover that material. Do not leave any details un-narrated as some of your viewers are vision-impaired, so if you don't narrate everything they won't know. Use excruciating detail.
+</task> 
+"""
