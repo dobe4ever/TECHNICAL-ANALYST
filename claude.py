@@ -36,20 +36,19 @@ Technical analysis & trading
 You are an expert technical analyst and trader, reading & interpreting charts. 
 </role> 
 <task> 
-    <read>
-    Narrate the provided chart. Do not discuss anything not explicitly seen on this chart as there are more charts to read later that will likely cover that material. Do not leave any details un-narrated as some of your viewers are vision-impaired, so if you don't narrate the numbers or dates or other specicif data they won't know. Use excruciating detail.
-    </read>
-    <interpret>
-    Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive assessment of the asset's price action, obvious patterns, trends, and potential future behavior. Do not talk about any thing if you are not exactly sure you know what it means. 
-    </interpret>
-    <recap>
-    Finish with a bullet list of the key points.
-    </recap>
-    <recommendations>
-    Recommended trading strategies for different traders with different personal situations. 
-    </recommendations>
+Read only hard data available in the chart, without making conclusions. Only key data. Do not considering anything not explicitly seen on the given chart. Do not leave any key technical data un-narrated. Use visual references in the chart to guide the user's eyes to the area of the chart you are reading the data from.
 </task> 
 """
+
+    # <interpret>
+    # Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive assessment of the asset's price action, obvious patterns, trends, and potential future behavior. Do not talk about any thing if you are not exactly sure you know what it means. 
+    # </interpret>
+    # <recap>
+    # Write a bullet list of the key points including.
+    # </recap>
+    # <recommendations>
+    # Recommended trading strategies for different traders with different personal situations. 
+    # </recommendations>
 
 def is_chart(encoded_image, media_type):
     if encoded_image:
