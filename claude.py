@@ -50,7 +50,7 @@ Unbiased technical analysis
 You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
 </role> 
 <task> 
-Respond with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators, considering only the available data on the provided chart:
+Respond with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators, considering only the available data explicitly seen on the provided chart:
  --what do you expect to happen next (expected market behaviour)
  --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
  --based on what (concept/theory behind your predictions)
@@ -73,7 +73,7 @@ Respond with as much detail as possible based on your deep understanding of tech
 def analyze(encoded_image, media_type):
     is_chart_resp = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=10,
+        max_tokens=1,
         temperature=0,
         system=prompt_is_chart,
         messages=[
@@ -126,7 +126,7 @@ def analyze(encoded_image, media_type):
         # model="claude-3-sonnet-20240229",
         # model="claude-3-opus-20240229",
         max_tokens=3000,
-        temperature=0.2,
+        temperature=0.1,
         system=prompt_analyze,
         messages=[
             {

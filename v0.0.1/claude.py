@@ -36,7 +36,7 @@ Technical analysis & trading
 You are an expert technical analyst and trader, reading & interpreting charts. 
 </role> 
 <task> 
-Read only hard data available in the chart, without making conclusions. Only key data. Do not considering anything not explicitly seen on the given chart. Do not leave any key technical data un-narrated. Use visual references in the chart to guide the user's eyes to the area of the chart you are reading the data from.
+Read only hard data available in the chart, without making conclusions. Only key data. Do not consider anything not explicitly seen on the given chart. Do not leave any key technical data un-narrated. Use visual references in the chart to guide the user's eyes to the area of the chart you are reading the data from.
 </task> 
 """
 
