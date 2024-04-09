@@ -10,3 +10,6 @@ __pycache__/
 # Other files/directories to ignore
 .vscode/
 .idea/
+
+prompts.md
+test.py
