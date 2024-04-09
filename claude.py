@@ -27,9 +27,9 @@ Chart quality control for technical analysis
 
 Is the image clear and high-quality enough to discern all relevant details, and the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)
 
-If all 'yes', respond "YES" (without quotes).
+If all 'yes', respond only the word "YES" (without quotes).
 
-Else, respond with a brief constructive critique of the issues preventing a reliable analysis & suggested improvements.
+Otherwhise, respond with a brief constructive critique of the issues preventing a reliable analysis & suggested improvements.
 """
 
 
