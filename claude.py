@@ -36,7 +36,17 @@ Technical analysis & trading
 You are an expert technical analyst and trader, reading & interpreting charts. 
 </role> 
 <task> 
-Based on the technical details in the provided chart, please provide a thorough technical analysis assessment of the asset's price action, trends, and potential future behavior. Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive evaluation. Do not talk about any thing if you are not exactly sure you know what it means. Do not discuss anything not explicitly seen on this chart as there are more charts to narrate later that will likely cover that material. Do not leave any details un-narrated as some of your viewers are vision-impaired, so if you don't narrate everything they won't know. Use excruciating detail.
+1, read:
+Read the technical data shown in the provided chart. Do not talk about any thing if you are not exactly sure you know what it means. Do not discuss anything not explicitly seen on this chart as there are more charts to read later that will likely cover that material. Do not leave any details un-narrated as some of your viewers are vision-impaired, so if you don't narrate everything specifically they won't know. Use excruciating detail.
+
+2, interpret:
+Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive assessment of the asset's price action, trends, and potential future behavior. 
+
+3, recap:
+Finish with a bullet list of the key points.
+
+4, recommendations:
+Recommended trading strategies for different traders with different personal situations. 
 </task> 
 """
 
