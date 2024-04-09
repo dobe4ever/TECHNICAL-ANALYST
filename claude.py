@@ -1,3 +1,4 @@
+from imghdr import what
 import anthropic
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -46,11 +47,16 @@ prompt_analyze = """
 Unbiased technical analysis
 </context> 
 <role> 
-You are an expert technical analyst, reading & interpreting user uploaded charts, based purely on universal technical analysis concepts & the hard data available on the chart at hand. 
+You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
 </role> 
 <task> 
-Analize the provided chart, and make an assessment based purely on technical analysis principles & rules on the given data, without considering any trading or investment actions. The point is to explain what the technicals suggest & make specific predictions, based on sound principles & math without considering anyone's personal situation. 
-Structure your response in a clear, well-organized manner, highlighting the key technical factors you have identified."
+Respond with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators, considering only the available data on the provided chart:
+ --what do you expect to happen next (expected market behaviour)
+ --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
+ --based on what (concept/theory behind your predictions)
+ --how probable (confidence level)
+ --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
+ --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
 </task> 
 """
 
