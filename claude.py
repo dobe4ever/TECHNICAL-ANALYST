@@ -4,14 +4,15 @@ import anthropic
 client = anthropic.Anthropic()
 
 
-is_chart_prompt = """
-<context> Image classification </context>
+prompt_is_chart = """
+<context>
+Image classification
+</context>
 
 <task>
 Only respond "YES" or "NO" (Without quotes)
 
-Is the image provided one of the following charts:
-
+Is the image provided one of the following charts?
 -- Candlestick
 -- Bar
 -- Line
@@ -19,6 +20,18 @@ Is the image provided one of the following charts:
 </task>
 """
             
+prompt_is_readable = """
+<context>
+Chart quality control for technical analysis
+</context>
+
+Is the image clear and high-quality enough to discern all relevant details, and the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)
+
+If all 'yes', respond "YES" (without quotes).
+
+Else, respond with a brief constructive critique of the issues preventing a reliable analysis & suggested improvements.
+"""
+
 
 # analyze_img_prompt = """
 # <context> Technical analysis </context>
@@ -28,15 +41,16 @@ Is the image provided one of the following charts:
 # </task> """
 
 
-analyze_img_prompt = """ 
+prompt_analyze = """ 
 <context> 
-Technical analysis & trading 
+Unbiased technical analysis
 </context> 
 <role> 
-You are an expert technical analyst and trader, reading & interpreting charts. 
+You are an expert technical analyst, reading & interpreting user uploaded charts, based purely on universal technical analysis concepts & the hard data available on the chart at hand. 
 </role> 
 <task> 
-Read only hard data available in the chart, without making conclusions. Only key data. Do not considering anything not explicitly seen on the given chart. Do not leave any key technical data un-narrated. Use visual references in the chart to guide the user's eyes to the area of the chart you are reading the data from.
+Analize the provided chart, and make an assessment based purely on technical analysis principles & rules on the given data, without considering any trading or investment actions. The point is to explain what the technicals suggest & make specific predictions, based on sound principles & math without considering anyone's personal situation. 
+Structure your response in a clear, well-organized manner, highlighting the key technical factors you have identified."
 </task> 
 """
 
@@ -50,62 +64,81 @@ Read only hard data available in the chart, without making conclusions. Only key
     # Recommended trading strategies for different traders with different personal situations. 
     # </recommendations>
 
-def is_chart(encoded_image, media_type):
-    if encoded_image:
-        message = client.messages.create(
-            model="claude-3-haiku-20240307",
-            max_tokens=10,
-            temperature=0,
-            system=is_chart_prompt,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": media_type,
-                                "data": encoded_image
-                            }
+def analyze(encoded_image, media_type):
+    is_chart_resp = client.messages.create(
+        model="claude-3-haiku-20240307",
+        max_tokens=10,
+        temperature=0,
+        system=prompt_is_chart,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": encoded_image
                         }
-                    ]
-                }
-            ]
-        )
-        response = message.content[0].text
-        print(response)
-        return str(response)
-    else:
-        return "No image uploaded."
+                    }
+                ]
+            }
+        ]
+    )
+    is_c = str(is_chart_resp.content[0].text)
+    if is_c != "YES":
+        return "Only technical analysis charts accepted, try again."
 
-def analyze_img(encoded_image, media_type):
-    if encoded_image:
-        message = client.messages.create(
-            model="claude-3-haiku-20240307",
-            # model="claude-3-sonnet-20240229",
-            # model="claude-3-opus-20240229",
-            max_tokens=3000,
-            temperature=0.2,
-            system=analyze_img_prompt,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": media_type,
-                                "data": encoded_image
-                            }
+    is_readable_resp = client.messages.create(
+        model="claude-3-haiku-20240307",
+        max_tokens=450,
+        temperature=0,
+        system=prompt_is_readable,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": encoded_image
                         }
-                    ]
-                }
-            ]
-        )
-        response = message.content[0].text
-        return str(response)
-    else:
-        return "No image uploaded."
+                    }
+                ]
+            }
+        ]
+    )
+    is_r = str(is_readable_resp.content[0].text)
+    if is_r != "YES":
+        return is_r
+
+    analysis_resp = client.messages.create(
+        model="claude-3-haiku-20240307",
+        # model="claude-3-sonnet-20240229",
+        # model="claude-3-opus-20240229",
+        max_tokens=3000,
+        temperature=0.2,
+        system=prompt_analyze,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": encoded_image
+                        }
+                    }
+                ]
+            }
+        ]
+    )
+    a = analysis_resp.content[0].text
+    return str(a)
+
 
