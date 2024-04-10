@@ -92,9 +92,9 @@ What's your chart analysis? Put your answer in <chart analysis> tags.
 
 What do you expect to happen next & when (I.e.: Already in progress, at future time, at specific price level, after specific condition met etc) Put your answer in <expected market behaviour> tags.
 
-Concept/theory behind your predictions & probability level Put your answer in <Prediction and Confidence Level> tags.
+Concept/theory behind your predictions & probability level Put your answer in <prediction and confidence level> tags.
 
-When to consider it no longer a valid prediction (I.e.: Specific date/time, price level, condition met etc) & why. Put your answer in <Invalidation Conditions> tags.
+When to consider it no longer a valid prediction (I.e.: Specific date/time, price level, condition met etc) & why. Put your answer in <invalidation conditions> tags.
 
 </questions>
 
@@ -192,10 +192,10 @@ def analyze(encoded_image, media_type):
     expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
 
     # Extract text within <Prediction and Confidence Level> tags
-    prediction_and_confidence = re.search(r'<Prediction and Confidence Level>(.*?)</Prediction and Confidence Level>', text, re.DOTALL).group(1)
+    prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
 
     # Extract text within <Invalidation Conditions> tags
-    invalidation_conditions = re.search(r'<Invalidation Conditions>(.*?)</Invalidation Conditions>', text, re.DOTALL).group(1)
+    invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
 
     return f"{chart_analysis}\n\n{expected_market_behaviour}\n\n{prediction_and_confidence}\n\n{invalidation_conditions}"
 
