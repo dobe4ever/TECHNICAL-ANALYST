@@ -72,7 +72,7 @@ def img_class_asst(encoded_image, media_type):
     res = r.content[0].text
     print(f"res: {res}")
 
-    if 'y' or 'Y' not in res:
+    if 'y' not in res:
         return f"res: {res}\n\nOnly images of charts accepted. Try again."
     
     an = client.messages.create(
