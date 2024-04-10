@@ -27,15 +27,18 @@ prompt_is_readable = """
 Chart quality control for technical analysis
 </context>
 
+<instructions>
+If the answer to both questions below is 'Yes', answer only with the word 'YES' (without quotes).
+If the answer to either or both questions is 'No', write a short paragraph explaining the specific issue(s) & suggest improvements for future charts.
+</instructions>
+
 <questions>
 - Is the image clear and high-quality enough to discern all relevant details? (Yes/No)
 - Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high) (Yes/No)
 </questions>
 
-<task>
-If the answer to both questions is 'Yes', write only the word 'YES' (without quotes).
-If the answer to either or both questions is 'No', write a short paragraph explaining the specific issue(s) & suggest improvements for future charts.
-</task>
+<answer>
+
 """
 
 
@@ -159,7 +162,7 @@ def analyze(encoded_image, media_type):
         ]
     )
     is_r = str(is_readable_resp.content[0].text)
-    if is_r != "YES":
+    if is_r[0] != "Y":
         return is_r
 
     analysis_resp = client.messages.create(
