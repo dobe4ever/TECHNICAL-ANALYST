@@ -8,7 +8,7 @@ client = anthropic.Anthropic()
 def img_class_asst(media_type, encoded_image):
     r = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=1,
+        max_tokens=10,
         system="""<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
         <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
         <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>""",
@@ -33,7 +33,7 @@ def img_class_asst(media_type, encoded_image):
     )
     resp = rr.content[0].text
     if resp[0] != 'Y': return resp
-    
+
     return analist_asst(encoded_image, media_type)
         
 
