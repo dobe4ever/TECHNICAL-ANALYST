@@ -1,6 +1,6 @@
 import streamlit as st
 from PIL import Image
-from claude import img_class_asst
+from claude import img_class_asst, analist_asst
 from utils import encode_img, data_to_telegram
 
 def main():
@@ -24,7 +24,8 @@ def main():
         with st.spinner("Doing technical analysis..."):
             encoded_image, media_type = encode_img(photo)
             if encoded_image:
-                ta = img_class_asst(encoded_image, media_type)
+                encoded_image, media_type = img_class_asst(encoded_image, media_type)
+                ta = analist_asst(encoded_image, media_type)
                 data_to_telegram(ta, photo)
                 st.success("Success!")
                 st.markdown("### Response:")
