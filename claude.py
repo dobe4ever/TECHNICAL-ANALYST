@@ -189,11 +189,35 @@ def analyze(encoded_image, media_type):
     soup = BeautifulSoup(text, 'html.parser')
 
     # Extract the text within each tag
-    # chart_details = soup.find('chart details').text.strip()
-    chart_analysis = soup.find('chart analysis').text.strip()
-    expected_market_behaviour = soup.find('expected market behaviour').text.strip()
-    prediction_and_confidence_level = soup.find('prediction and confidence level').text.strip()
-    invalidation_conditions = soup.find('invalidation conditions').text.strip()
+    chart_details = soup.find_all('chart details', string=True)
+    if chart_details:
+        chart_details = chart_details[0].strip()
+    else:
+        chart_details = None
+
+    chart_analysis = soup.find('chart analysis')
+    if chart_analysis:
+        chart_analysis = chart_analysis.text.strip()
+    else:
+        chart_analysis = None
+
+    expected_market_behaviour = soup.find('expected market behaviour')
+    if expected_market_behaviour:
+        expected_market_behaviour = expected_market_behaviour.text.strip()
+    else:
+        expected_market_behaviour = None
+
+    prediction_and_confidence_level = soup.find('prediction and confidence level')
+    if prediction_and_confidence_level:
+        prediction_and_confidence_level = prediction_and_confidence_level.text.strip()
+    else:
+        prediction_and_confidence_level = None
+
+    invalidation_conditions = soup.find('invalidation conditions')
+    if invalidation_conditions:
+        invalidation_conditions = invalidation_conditions.text.strip()
+    else:
+        invalidation_conditions = None
 
     r = str(chart_analysis, expected_market_behaviour, prediction_and_confidence_level, invalidation_conditions)
 
