@@ -182,6 +182,7 @@ def analyze(encoded_image, media_type):
         ]
     )
     text = analysis_resp.content[0].text
+    text = str(text)
     print(text)
 
     # Create a BeautifulSoup object
