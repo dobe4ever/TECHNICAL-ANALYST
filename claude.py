@@ -70,6 +70,8 @@ def img_class_asst(encoded_image, media_type):
         ]
     )
     res = r.content[0].text
+    print(f"'Y' is not in the string: {res}")
+
     if "y" or "Y" not in res:
         return "Only images of charts accepted. Try again."
     
