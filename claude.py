@@ -219,6 +219,11 @@ def analyze(encoded_image, media_type):
     else:
         invalidation_conditions = None
 
-    r = str(chart_analysis, expected_market_behaviour, prediction_and_confidence_level, invalidation_conditions)
+    # Print the extracted text
+    print(chart_details)
+    print(chart_analysis)
+    print(expected_market_behaviour)
+    print(prediction_and_confidence_level)
+    print(invalidation_conditions)
 
-    return text, r
+    return text
