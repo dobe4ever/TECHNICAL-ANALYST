@@ -86,23 +86,24 @@ Respond the questions about the chart provided down below, based on your deep un
 </task> 
 
 <questions>
-- What's the chart details? (Specify the available chart data & last recorded values including date/time, price, indicators, custom drawings, & every other element showing specific data value) Put your answer in <chart details> tags.
+- What are the chart details? (Specify the available chart data & all last recorded values, such as date/time, price, active indicators, drawings, & so on for every data element that applies to the particular chart provided down below) Put your answer in <chart details> tags.
 
 - What's your chart analysis? (Comprehensive technical analysis assesement of the chart, one element at a time & what they suggest) Put your answer in <chart analysis> tags.
 
+- From your chart analysis above, what's the most significant data & key take aways. Put your answer in <key chart info> tags.
+
 - What do you expect to happen next (expected market behaviour) & when (I.e.: Already in progress, at a specific future time, at specific price level, after specific condition is met etc) Put your answer in <expected market behaviour> tags.
 
-- Concept/theory behind your predictions & probability level Put your answer in <prediction and confidence level> tags.
+- Concept/theory behind your predictions & probability level. Put your answer in <prediction and confidence level> tags.
 
 - When to consider it no longer a valid prediction (I.e.: At a specific date/time, above/below a specific price level, if certain condition is met etc) & why. Put your answer in <invalidation conditions> tags.
 </questions>
 
 <instructions>
-Do not discuss anything not explicitly seen on the chart.
-Do not use data values other than the values seen on the chart.
-Use visual references and actual values as seen on the chart to guide the user's eyes to the relevant areas of the chart being discussed.
+Use visual references and real values from the chart to guide the user's eyes to the areas of the chart you are discussing.
+Focus solely on the available technical data in the chart at hand & don't consider or discuss fundamentals or other factors if relevant data is not explicitly seen on the chart.
 If the chart data is insufficient to answer a specific question, skip that question or part of the question.
-If there are no strong enough signals in the chart to make predictions with confidence, explain why the current signals are not good & what would you need to see before leaning to a particular prediction.
+If there aren't strong enough signals in this chart to make reasonable predictions, explain why the current signals are not good & what would you need to see before leaning to a particular prediction.
 </instructions>
 """
 
@@ -184,11 +185,12 @@ def analyze(encoded_image, media_type):
     text = str(t)
 
     # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
-    chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+    # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+    key_chart_info = re.search(r'<key chart info>(.*?)</key chart info>', text, re.DOTALL).group(1)
     expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
     prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
     invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
 
-    final = f"{chart_analysis}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
+    final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
     return final
