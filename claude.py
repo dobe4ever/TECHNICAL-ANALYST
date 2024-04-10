@@ -60,7 +60,7 @@ If there aren't strong enough signals in this chart to make reasonable predictio
 def img_class_asst(media_type, encoded_image):
     r = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=10,
+        max_tokens=500,
         system="""<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
         <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
         <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>""",
