@@ -1,4 +1,5 @@
 import os
+import re
 import base64
 import requests
 
@@ -39,3 +40,4 @@ def data_to_telegram(response, photo):
             "text": response
         }
         requests.post(text_url, json=payload)
+

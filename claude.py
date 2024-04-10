@@ -4,46 +4,47 @@ import anthropic
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
 client = anthropic.Anthropic()
 
-questions = ["Is the image clear and high-quality enough to discern all relevant details?", "Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)"]
 
+def img_class_asst(media_type, encoded_image):
+    r = client.messages.create(
+        model="claude-3-haiku-20240307",
+        max_tokens=1,
+        system="""<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
+        <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
+        <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>""",
+        messages=[{"role": "user", "content": [
+                    {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
+                    {"type": "text", "text": "<question 1>Is the image provided a chart?</question 1>\n<question 2>Is the image quality & readability acceptable?</question 2>"}]}]
+    )
+    res = r.content[0].text
 
-prompt_is_chart = """
-<context>
-Image classification
-</context>
+    a = get_tag("answer 1", res)
+    if a[0] == 'n': return "Only images of charts accepted. Try again."
+    
+    aa = get_tag("answer 2", res)
+    if aa[0] == 'n': return "Bad image quality. Try again."    
 
-<task>
-Only respond 'YES' or 'NO' (Without quotes)
+    rr = client.messages.create(
+        model="claude-3-haiku-20240307",
+        max_tokens=500,
+        messages=[{"role": "user", "content": [
+                    {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
+                    {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
+    )
+    resp = rr.content[0].text
+    if resp[0] != 'Y': return resp
+        
 
-Is the image provided one of the following charts?
-- Candlestick
-- Bar
-- Line
-- A chart where technical analysis can be performed
-</task>
-"""
-            
-prompt_is_readable = """
-<context>
-Chart quality control for technical analysis
-</context>
-
-<instructions>
-If the answer to both questions is 'Yes', respond only with the charachter 'Y' alone, without the quotes or additional explanations or anything at all, just the one character (Y).
-For all other cases, respond with a short paragraph explaining the specific issue(s) & suggest improvements for future charts.
-Here's the questions: {questions}
-</instructions>
-"""
-
-prompt_analyze = """ 
-<context> Technical analysis </context>
-
+prompt_analyze = """
 <role> 
-You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
+You are an opinionated technical analyst expert who makes bold market predictions based on sound principles & math, applied to any given chart.
+Your not here to give trading advice or to even suggest an appropiate course of action. You only care about the chart in front of you, not anyone's finances & personal situations.
+You are just the best at anticipating explosive market movements & have an incredible track record on making accurate calls consistently for many years. From calling perfect market tops & bottoms, breakouts & breakdown, & spotting significant levels for any type of price reaction. 
 </role> 
 
 <task> 
-Respond the questions about the chart provided down below, based on your deep understanding of technical analysis concepts, principles, and indicators.
+Respond questions about the chart provided down below, based on your deep understanding of technical analysis concepts, principles, and indicators.
+If a given question cannot be answered by the image, skip the question or part of the question.
 </task> 
 
 <questions>
@@ -62,112 +63,55 @@ Respond the questions about the chart provided down below, based on your deep un
 
 <instructions>
 Use visual references and real values from the chart to guide the user's eyes to the areas of the chart you are discussing.
-Focus solely on the available technical data in the chart at hand & don't consider or discuss fundamentals or other factors if relevant data is not explicitly seen on the chart.
-If the chart data is insufficient to answer a specific question, skip that question or part of the question.
+Focus solely on the available data in the chart at hand & don't consider or discuss fundamentals
 If there aren't strong enough signals in this chart to make reasonable predictions, explain why the current signals are not good & what would you need to see before leaning to a particular prediction.
 </instructions>
 """
 
-def analyze(encoded_image, media_type):
-    is_chart_resp = client.messages.create(
-        model="claude-3-haiku-20240307",
-        max_tokens=1,
-        temperature=0,
-        system=prompt_is_chart,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": encoded_image
-                        }
-                    }
-                ]
-            }
-        ]
-    )
-    is_c = str(is_chart_resp.content[0].text)
-    if "o" in is_c:
-        return "Only technical analysis charts accepted, try again."
-
-    is_readable_resp = client.messages.create(
-        model="claude-3-sonnet-20240229",
-        max_tokens=100,
-        temperature=0,
-        system=prompt_is_readable,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": encoded_image
-                        }
-                    }
-                ]
-            }
-        ]
-    )
-    is_r = str(is_readable_resp.content[0].text)
-    if is_r[0] != "Y":
-        return is_r
-
+def analist_asst(encoded_image, media_type):
     analysis_resp = client.messages.create(
         model="claude-3-haiku-20240307",
         # model="claude-3-sonnet-20240229",
         # model="claude-3-opus-20240229",
         max_tokens=3000,
-        temperature=0.1,
+        temperature=1,
         system=prompt_analyze,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": encoded_image
-                        }
-                    }
-                ]
-            }
-        ]
+        messages=[{"role": "user", "content": [
+                    {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
+                    {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
     )
-    t = analysis_resp.content[0].text
-    text = str(t)
+    text = analysis_resp.content[0].text
 
     # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
     # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
 
-    if '<key chart inf>' in text and '</key chart inf>' in text:
-        key_chart_info = re.search(r'<key chart info>(.*?)</key chart info>', text, re.DOTALL).group(1)
-    else:
-        key_chart_info = ""
+    key_chart_info = get_tag("key chart inf", text)
     
-    if '<expected market behaviour>' in text and '</expected market behaviour>' in text:
-        expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
-    else:
-        expected_market_behaviour = ""
+    expected_market_behaviour = get_tag("expected market behaviour", text)
 
-    if '<prediction and confidence level>' in text and '</prediction and confidence level>' in text:
-        prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
-    else:
-        prediction_and_confidence = ""
+    prediction_and_confidence = get_tag("prediction and confidence", text)
 
-    if '<invalidation conditions>' in text and '</invalidation conditions>' in text:
-        invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
-    else:
-        invalidation_conditions = ""
+    invalidation_conditions = get_tag("invalidation conditions", text)
 
     final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
     return final
+
+
+def get_tag(tag: str, string: str, strip: bool = False) -> list[str]:
+    ext_list = re.findall(f"<{tag}>(.+?)</{tag}>", string, re.DOTALL)
+    if strip:
+        ext_list = [e.strip() for e in ext_list]
+    return ext_list
+
+def remove_empty_tags(text):
+    return re.sub(r'<(\w+)></\1>$', '', text)
+
+# def get_prompt(metaprompt_response):
+#     between_tags = get_tag("Instructions", metaprompt_response)[0]
+#     return remove_empty_tags(remove_empty_tags(between_tags).strip()).strip()
+
+# def get_variables(prompt):
+#     pattern = r'{([^}]+)}'
+#     variables = re.findall(pattern, prompt)
+#     return set(variables)
