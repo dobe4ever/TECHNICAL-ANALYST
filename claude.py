@@ -1,7 +1,6 @@
 import re
 import anthropic
 
-
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
 client = anthropic.Anthropic()
 
@@ -33,53 +32,13 @@ If the answer to either or both questions is 'No', write a short paragraph expla
 </instructions>
 
 <questions>
-- Is the image clear and high-quality enough to discern all relevant details? (Yes/No)
-- Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high) (Yes/No)
+- Is the image clear and high-quality enough to discern all relevant details?
+- Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)
 </questions>
 
 <answer>
 
 """
-
-
-# analyze_img_prompt = """
-# <context> Technical analysis </context>
-
-# <task>
-# Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis concepts, and only considering without considering the available information visible on the given chart.
-# </task> """
-
-
-# prompt_analyze = """ 
-# <context> 
-# Unbiased technical analysis
-# </context> 
-# <role> 
-# You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
-# </role> 
-# <task> 
-# From the provided chart, extract key technical data & what it suggest. 
-# Based on your deep understanding of technical analysis concepts, principles, and indicators, extract key technical data from the provided chart. Do not include any data not explicitly seen on the chart.
-# Answer with as much detail as possible:
-#  --what do you expect to happen next (expected market behaviour)
-#  --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
-#  --based on what (concept/theory behind your predictions)
-#  --how probable (confidence level)
-#  --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
-#  --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
-# </task> 
-# """
-
-    # <interpret>
-    # Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive assessment of the asset's price action, obvious patterns, trends, and potential future behavior. Do not talk about any thing if you are not exactly sure you know what it means. 
-    # </interpret>
-    # <recap>
-    # Write a bullet list of the key points including.
-    # </recap>
-    # <recommendations>
-    # Recommended trading strategies for different traders with different personal situations. 
-    # </recommendations>
-
 
 prompt_analyze = """ 
 <context> Technical analysis </context>
@@ -137,12 +96,12 @@ def analyze(encoded_image, media_type):
         ]
     )
     is_c = str(is_chart_resp.content[0].text)
-    if is_c != "YES":
+    if "o" in is_c:
         return "Only technical analysis charts accepted, try again."
 
     is_readable_resp = client.messages.create(
-        model="claude-3-haiku-20240307",
-        max_tokens=450,
+        model="claude-3-sonnet-20240229",
+        max_tokens=100,
         temperature=0,
         system=prompt_is_readable,
         messages=[
