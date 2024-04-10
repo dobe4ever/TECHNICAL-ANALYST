@@ -33,6 +33,8 @@ def img_class_asst(media_type, encoded_image):
     )
     resp = rr.content[0].text
     if resp[0] != 'Y': return resp
+    
+    return analist_asst(encoded_image, media_type)
         
 
 prompt_analyze = """
