@@ -28,6 +28,44 @@ Is the image provided one of the following charts:
 # </task> """
 
 
+# analyze_img_prompt = """
+# <context> Technical analysis </context>
+
+# <task>
+# Your task is to analyze the chart provided and write a comprehensive assessment based solely on technical analysis concepts, and only considering without considering the available information visible on the given chart.
+# </task> """
+
+
+# prompt_analyze = """ 
+# <context> 
+# Unbiased technical analysis
+# </context> 
+# <role> 
+# You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
+# </role> 
+# <task> 
+# From the provided chart, extract key technical data & what it suggest. 
+# Based on your deep understanding of technical analysis concepts, principles, and indicators, extract key technical data from the provided chart. Do not include any data not explicitly seen on the chart.
+# Answer with as much detail as possible:
+#  --what do you expect to happen next (expected market behaviour)
+#  --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
+#  --based on what (concept/theory behind your predictions)
+#  --how probable (confidence level)
+#  --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
+#  --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
+# </task> 
+# """
+
+    # <interpret>
+    # Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive assessment of the asset's price action, obvious patterns, trends, and potential future behavior. Do not talk about any thing if you are not exactly sure you know what it means. 
+    # </interpret>
+    # <recap>
+    # Write a bullet list of the key points including.
+    # </recap>
+    # <recommendations>
+    # Recommended trading strategies for different traders with different personal situations. 
+    # </recommendations>
+    
 analyze_img_prompt = """ 
 <context> 
 Technical analysis & trading 
