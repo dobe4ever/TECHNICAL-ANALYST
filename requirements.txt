@@ -2,3 +2,4 @@ streamlit
 anthropic
 pillow
 requests
+beautifulsoup4
