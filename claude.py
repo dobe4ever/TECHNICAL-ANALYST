@@ -191,11 +191,12 @@ def analyze(encoded_image, media_type):
     # Extract text within <expected market behaviour> tags
     expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
 
-    # Extract text within <Prediction and confidence level> tags
+    # Extract text within <Prediction and Confidence Level> tags
     prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
 
     # Extract text within <Invalidation Conditions> tags
-    invalidation_conditions = re.search(r'<invalidation Conditions>(.*?)</invalidation Conditions>', text, re.DOTALL).group(1)
+    invalidation_conditions = re.search(r'<invalidation Conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
 
 
-    return f"{chart_analysis}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
+
+    return f"{text}\n\n{chart_analysis}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
