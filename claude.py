@@ -74,26 +74,36 @@ Otherwhise, respond with a brief constructive critique of the issues preventing 
 
 
 prompt_analyze = """ 
-<context> 
-Unbiased technical analysis
-</context> 
+<context> Technical analysis </context>
+
 <role> 
 You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data that's presented to you. 
 </role> 
+
 <task> 
 Respond the questions about the chart provided by the user with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators.
-Do not discuss anything not explicitly seen on the chart. If the chart is insufficient to answer a specific question, skip that question or part of the question.
 </task> 
+
 <questions>
-- What's the chart details? (Do not leave any details un-narrated)
-- What's your chart analysis? (Use visual references and values as seen on the chart to guide the user's eyes to the relevant area of the chart being discussed)
-- What do you expect to happen next (expected market behaviour)
-- When will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
-- Based on what (concept/theory behind your predictions)
-- How probable (confidence level)
-- When to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
-- If no clear signals in the chart, what would you need to see before leaning to a particular prediction.
+
+What's the chart details? Put your answer in <chart details> tags.
+
+What's your chart analysis? Put your answer in <chart analysis> tags.
+
+What do you expect to happen next & when (I.e.: Already in progress, at future time, at specific price level, after specific condition met etc) Put your answer in <expected market behaviour> tags.
+
+Concept/theory behind your predictions & probability level Put your answer in <Prediction and Confidence Level> tags.
+
+When to consider it no longer a valid prediction (I.e.: Specific date/time, price level, condition met etc) & why. Put your answer in <Invalidation Conditions> tags.
+
 </questions>
+
+<instructions>
+Do not discuss anything not explicitly seen on the chart.
+Use visual references and actual values as seen on the chart to guide the user's eyes to the relevant areas of the chart being discussed.
+If the chart data is insufficient to answer a specific question, skip that question or part of the question.
+If there are no strong enough signals in the chart to make predictions with confidence, explain why the current signals are not good & what would you need to see before leaning to a particular prediction.
+</instructions>
 """
 
 def analyze(encoded_image, media_type):
