@@ -12,13 +12,13 @@ Image classification
 </context>
 
 <task>
-Only respond "YES" or "NO" (Without quotes)
+Only respond 'YES' or 'NO' (Without quotes)
 
 Is the image provided one of the following charts?
--- Candlestick
--- Bar
--- Line
--- A chart where technical analysis can be performed
+- Candlestick
+- Bar
+- Line
+- A chart where technical analysis can be performed
 </task>
 """
             
@@ -27,11 +27,15 @@ prompt_is_readable = """
 Chart quality control for technical analysis
 </context>
 
-Is the image clear and high-quality enough to discern all relevant details, and the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)
+<questions>
+- Is the image clear and high-quality enough to discern all relevant details? (Yes/No)
+- Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high) (Yes/No)
+</questions>
 
-If all 'yes', respond only the word "YES" (without quotes).
-
-Otherwhise, respond with a brief constructive critique of the issues preventing a reliable analysis & suggested improvements.
+<task>
+If the answer to both questions is 'Yes', write only the word 'YES' (without quotes).
+If the answer to either or both questions is 'No', write a short paragraph explaining the specific issue(s) & suggest improvements for future charts.
+</task>
 """
 
 
