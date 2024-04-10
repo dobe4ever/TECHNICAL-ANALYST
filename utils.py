@@ -1,4 +1,5 @@
 import os
+import re
 import base64
 import requests
 
@@ -40,3 +41,21 @@ def data_to_telegram(response, photo):
         }
         requests.post(text_url, json=payload)
 
+
+def get_tag(tag: str, string: str, strip: bool = False) -> list[str]:
+    ext_list = re.findall(f"<{tag}>(.+?)</{tag}>", string, re.DOTALL)
+    if strip:
+        ext_list = [e.strip() for e in ext_list]
+    return ext_list
+
+def remove_empty_tags(text):
+    return re.sub(r'<(\w+)></\1>$', '', text)
+
+# def get_prompt(metaprompt_response):
+#     between_tags = get_tag("Instructions", metaprompt_response)[0]
+#     return remove_empty_tags(remove_empty_tags(between_tags).strip()).strip()
+
+# def get_variables(prompt):
+#     pattern = r'{([^}]+)}'
+#     variables = re.findall(pattern, prompt)
+#     return set(variables)
