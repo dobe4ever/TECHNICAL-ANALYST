@@ -197,7 +197,7 @@ def analyze(encoded_image, media_type):
 
     key_chart_info = re.search(r'<key chart info>(.*?)</key chart info>', text, re.DOTALL).group(1)
     
-    if '<expected market behaviour>' & '</expected market behaviour>' in text:
+    if '<expected market behaviour>' in text & '</expected market behaviour>' in text:
         expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
 
     prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
