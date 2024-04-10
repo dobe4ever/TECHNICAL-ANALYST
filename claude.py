@@ -193,10 +193,22 @@ def analyze(encoded_image, media_type):
 
     # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
     # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+    
     key_chart_info = re.search(r'<key chart info>(.*?)</key chart info>', text, re.DOTALL).group(1)
+    if key_chart_info is None: 
+        key_chart_info = ""
+
     expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
+    if expected_market_behaviour is None:
+        expected_market_behaviour = ""
+
     prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
+    if prediction_and_confidence is None:
+        prediction_and_confidence = ""
+
     invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
+    if invalidation_conditions is None:
+        invalidation_conditions = ""
 
     final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
