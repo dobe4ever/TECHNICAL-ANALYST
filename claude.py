@@ -65,7 +65,14 @@ def img_class_asst(media_type, encoded_image):
         <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
         <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>""",
         messages=[{"role": "user", "content": [
-                    {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
+                       {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": encoded_image
+                        }
+                    },
                     {"type": "text", "text": "<question 1>Is the image provided a chart?</question 1>\n<question 2>Is the image quality & readability acceptable?</question 2>"}]}]
     )
     res = r.content[0].text
@@ -80,8 +87,17 @@ def img_class_asst(media_type, encoded_image):
         model="claude-3-haiku-20240307",
         max_tokens=500,
         messages=[{"role": "user", "content": [
-                    {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
-                    {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output 'y' (without quotes). If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
+                    {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": encoded_image
+                        }
+                    },
+                    {
+                        "type": "text", 
+                        "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output 'y' (without quotes). If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
     )
     resp = rr.content[0].text
     if resp[0] != 'Y': return resp
