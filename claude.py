@@ -29,12 +29,14 @@ def img_class_asst(media_type, encoded_image):
         max_tokens=500,
         messages=[{"role": "user", "content": [
                     {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
-                    {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
+                    {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output 'y' (without quotes). If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
     )
     resp = rr.content[0].text
     if resp[0] != 'Y': return resp
 
-    return analist_asst(encoded_image, media_type)
+    ta = analist_asst(encoded_image, media_type)
+
+    return ta
         
 
 prompt_analyze = """
@@ -83,18 +85,12 @@ def analist_asst(encoded_image, media_type):
                     {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
     )
     text = analysis_resp.content[0].text
-
     # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
     # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
-
     key_chart_info = get_tag("key chart inf", text)
-    
     expected_market_behaviour = get_tag("expected market behaviour", text)
-
     prediction_and_confidence = get_tag("prediction and confidence", text)
-
     invalidation_conditions = get_tag("invalidation conditions", text)
-
     final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
     return final
