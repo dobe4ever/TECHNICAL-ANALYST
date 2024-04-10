@@ -226,4 +226,6 @@ def analyze(encoded_image, media_type):
     print(prediction_and_confidence_level)
     print(invalidation_conditions)
 
-    return text
+    tag_data = f"{chart_analysis}\n\n{expected_market_behaviour}\n\n{prediction_and_confidence_level}\n\n{invalidation_conditions}\n\n"
+
+    return tag_data
