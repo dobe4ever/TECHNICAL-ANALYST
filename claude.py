@@ -220,6 +220,7 @@ def analyze(encoded_image, media_type):
         invalidation_conditions = None
 
     # Print the extracted text
+    print("Prints:/n/n")
     print(chart_details)
     print(chart_analysis)
     print(expected_market_behaviour)
