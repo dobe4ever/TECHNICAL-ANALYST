@@ -82,16 +82,16 @@ You are an opinionated technical analyst who makes bold market predictions by ap
 </role> 
 <task> 
 Respond with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators. Only use factual data from the chart itself. If no data can be found to answer a specific question, skip that question or part of the question.
- --Whats this chart & basic chart info.
- --what are the active chart elements ('The chart elements' would be, if the chart was represented as CSV data, the different column names)
- --What are the significant data points ('A data point', in CSV data, would be the value inside each cell)
- --what do each chart element suggests.
- --what do you expect to happen next (expected market behaviour)
- --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
- --based on what (concept/theory behind your predictions)
- --how probable (confidence level)
- --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
- --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
+-Whats this chart & basic chart info.
+-what are the active chart elements ('The chart elements' would be, if the chart was represented as CSV data, the different column names)
+-What are the significant data points ('A data point', in CSV data, would be the value inside each cell)
+-what do each chart element suggests.
+-what do you expect to happen next (expected market behaviour)
+-when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
+-based on what (concept/theory behind your predictions)
+-how probable (confidence level)
+-when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
+-if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
 </task> 
 """
 
@@ -148,9 +148,9 @@ def analyze(encoded_image, media_type):
         return is_r
 
     analysis_resp = client.messages.create(
-        # model="claude-3-haiku-20240307",
+        model="claude-3-haiku-20240307",
         # model="claude-3-sonnet-20240229",
-        model="claude-3-opus-20240229",
+        # model="claude-3-opus-20240229",
         max_tokens=3000,
         temperature=0.1,
         system=prompt_analyze,
