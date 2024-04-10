@@ -69,18 +69,15 @@ def img_class_asst(encoded_image, media_type):
             }
         ]
     )
-    res = r.content[0].text
-    print(f"res: {res}")
-
-    if 'y' not in res:
-        return f"res: {res}\n\nOnly images of charts accepted. Try again."
+    if 'y' not in r.content[0].text:
+        return "Only images of charts accepted. Try again."
     
     an = client.messages.create(
         model="claude-3-haiku-20240307",
         # model="claude-3-sonnet-20240229",
         # model="claude-3-opus-20240229",
         max_tokens=3000,
-        temperature=0.2,
+        temperature=1,
         system=analist_sys,
         messages=[
             {
@@ -107,7 +104,7 @@ def img_class_asst(encoded_image, media_type):
     invalidation_conditions = get_tag("invalidation conditions", text)
     final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
-    return final
+    return text, final
     
 
 
