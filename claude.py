@@ -4,6 +4,8 @@ import anthropic
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
 client = anthropic.Anthropic()
 
+questions = ["Is the image clear and high-quality enough to discern all relevant details?", "Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)"]
+
 
 prompt_is_chart = """
 <context>
@@ -27,17 +29,10 @@ Chart quality control for technical analysis
 </context>
 
 <instructions>
-If the answer to both questions below is 'Yes', answer only with the word 'YES' (without quotes).
-If the answer to either or both questions is 'No', write a short paragraph explaining the specific issue(s) & suggest improvements for future charts.
+If the answer to both questions is 'Yes', respond only with the charachter 'Y' alone, without the quotes or additional explanations or anything at all, just the one character (Y).
+For all other cases, respond with a short paragraph explaining the specific issue(s) & suggest improvements for future charts.
+Here's the questions: {questions}
 </instructions>
-
-<questions>
-- Is the image clear and high-quality enough to discern all relevant details?
-- Is the chart data presented in a standard, commonly-used format that can be easily interpreted? i.e. no distracting, excessive or cluttered elements that make it difficult to read. (signal to noice ratio too high)
-</questions>
-
-<answer>
-
 """
 
 prompt_analyze = """ 
