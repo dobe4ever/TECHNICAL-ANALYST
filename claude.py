@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+import re
 import anthropic
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -182,12 +182,20 @@ def analyze(encoded_image, media_type):
     )
     text = analysis_resp.content[0].text
 
-    soup = BeautifulSoup(text, 'html.parser')
+    # Extract text within <chart details> tags
+    # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
 
-    # chart_details = soup.find('chart details').get_text()
-    chart_analysis = soup.find('chart analysis').get_text()
-    expected_market_behaviour = soup.find('expected market behaviour').get_text()
-    prediction_and_confidence = soup.find('prediction and confidence level').get_text()
-    invalidation_conditions = soup.find('invalidation conditions').get_text()
+    # Extract text within <chart analysis> tags
+    chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
 
-    return f"{chart_analysis}\n{expected_market_behaviour}\n{prediction_and_confidence}\n{invalidation_conditions}"
+    # Extract text within <expected market behaviour> tags
+    expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
+
+    # Extract text within <Prediction and confidence level> tags
+    prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</Prediction and confidence level>', text, re.DOTALL).group(1)
+
+    # Extract text within <Invalidation Conditions> tags
+    invalidation_conditions = re.search(r'<invalidation Conditions>(.*?)</invalidation Conditions>', text, re.DOTALL).group(1)
+
+
+    return f"{chart_analysis}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
