@@ -1,5 +1,5 @@
+import re
 import anthropic
-from bs4 import BeautifulSoup
 
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -181,51 +181,15 @@ def analyze(encoded_image, media_type):
             }
         ]
     )
-    text = analysis_resp.content[0].text
-    text = str(text)
+    t = analysis_resp.content[0].text
+    text = str(t)
 
-    # Create a BeautifulSoup object
-    soup = BeautifulSoup(text, 'html.parser')
+    # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
+    chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+    expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
+    prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
+    invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
 
-    # Extract the text within each tag
-    chart_details = soup.find_all('chart details', string=True)
-    if chart_details:
-        chart_details = chart_details[0].strip()
-    else:
-        chart_details = None
+    final = f"{chart_analysis}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
-    chart_analysis = soup.find('chart analysis')
-    if chart_analysis:
-        chart_analysis = chart_analysis.text.strip()
-    else:
-        chart_analysis = None
-
-    expected_market_behaviour = soup.find('expected market behaviour')
-    if expected_market_behaviour:
-        expected_market_behaviour = expected_market_behaviour.text.strip()
-    else:
-        expected_market_behaviour = None
-
-    prediction_and_confidence_level = soup.find('prediction and confidence level')
-    if prediction_and_confidence_level:
-        prediction_and_confidence_level = prediction_and_confidence_level.text.strip()
-    else:
-        prediction_and_confidence_level = None
-
-    invalidation_conditions = soup.find('invalidation conditions')
-    if invalidation_conditions:
-        invalidation_conditions = invalidation_conditions.text.strip()
-    else:
-        invalidation_conditions = None
-
-    # Print the extracted text
-    print("Prints:/n/n")
-    print(chart_details)
-    print(chart_analysis)
-    print(expected_market_behaviour)
-    print(prediction_and_confidence_level)
-    print(invalidation_conditions)
-
-    tag_data = f"{chart_analysis}\n\n{expected_market_behaviour}\n\n{prediction_and_confidence_level}\n\n{invalidation_conditions}\n\n"
-
-    return tag_data
+    return final
