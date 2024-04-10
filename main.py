@@ -1,6 +1,6 @@
 import streamlit as st
 from PIL import Image
-from claude import img_class_asst, analist_asst
+from claude import img_class_asst
 from utils import encode_img, data_to_telegram
 
 def main():
