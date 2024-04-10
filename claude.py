@@ -99,7 +99,7 @@ Respond the questions about the chart provided down below, based on your deep un
 
 - From your chart analysis above, what's the most significant data & key take aways. Put your answer in <key chart info> tags.
 
-- What do you expect to happen next (expected market behaviour) & when (I.e.: Already in progress, at a specific future time, at specific price level, after specific condition is met etc) Put your answer in <expected market behaviour> tags.
+- What do you expect to happen next (x price action/reaction) & when (I.e.: Already in progress, at a specific future time, at specific price level, after specific condition is met etc) Put your answer in <expected market behaviour> tags.
 
 - Concept/theory behind your predictions & probability level. Put your answer in <prediction and confidence level> tags.
 
@@ -194,20 +194,26 @@ def analyze(encoded_image, media_type):
     # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
     # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
 
-
-    key_chart_info = re.search(r'<key chart info>(.*?)</key chart info>', text, re.DOTALL).group(1)
+    if '<key chart inf>' in text and '</key chart inf>' in text:
+        key_chart_info = re.search(r'<key chart info>(.*?)</key chart info>', text, re.DOTALL).group(1)
+    else:
+        key_chart_info = ""
     
     if '<expected market behaviour>' in text and '</expected market behaviour>' in text:
         expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
+    else:
+        expected_market_behaviour = ""
 
-    prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
-    if prediction_and_confidence is None:
+    if '<prediction and confidence level>' in text and '</prediction and confidence level>' in text:
+        prediction_and_confidence = re.search(r'<prediction and confidence level>(.*?)</prediction and confidence level>', text, re.DOTALL).group(1)
+    else:
         prediction_and_confidence = ""
 
-    invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
-    if invalidation_conditions is None:
+    if '<invalidation conditions>' in text and '</invalidation conditions>' in text:
+        invalidation_conditions = re.search(r'<invalidation conditions>(.*?)</invalidation conditions>', text, re.DOTALL).group(1)
+    else:
         invalidation_conditions = ""
 
     final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
-    return text
+    return final
