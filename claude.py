@@ -22,9 +22,10 @@ def remove_empty_tags(text):
 #     variables = re.findall(pattern, prompt)
 #     return set(variables)
 
-p = """<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
-        <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
-        <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>"""
+p = """
+<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
+<instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
+<example><answer 1>n</answer 1> <answer 2>n</answer 2><example>"""
 
 pp = """
 <role> 
@@ -61,79 +62,81 @@ If there aren't strong enough signals in this chart to make reasonable predictio
 
 
 def img_class_asst(media_type, encoded_image):
-    r = client.messages.create(
-        model="claude-3-haiku-20240307",
-        max_tokens=500,
-        system=p,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": encoded_image
+    if encoded_image:
+        r = client.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=500,
+            system=p,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": media_type,
+                                "data": encoded_image
+                            }
                         }
-                    }
-                ]
-            }
-        ]
-    )
-    res = r.content[0].text
+                    ]
+                }
+            ]
+        )
+        res = r.content[0].text
 
-    a = get_tag("answer 1", res)
-    if a[0] == 'n': return "Only images of charts accepted. Try again."
-    
-    aa = get_tag("answer 2", res)
-    if aa[0] == 'n': return "Bad image quality. Try again."    
+        a = get_tag("answer 1", res)
+        if a[0] == 'n': return "Only images of charts accepted. Try again."
+        
+        aa = get_tag("answer 2", res)
+        if aa[0] == 'n': return "Bad image quality. Try again."    
 
-    rr = client.messages.create(
-        model="claude-3-haiku-20240307",
-        max_tokens=500,
-        messages=[{"role": "user", "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": encoded_image
-                        }
-                    },
-                    {
-                        "type": "text", 
-                        "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output 'y' (without quotes). If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
-    )
-    resp = rr.content[0].text
-    if resp[0] != 'Y': return resp
+        rr = client.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=500,
+            messages=[{"role": "user", "content": [
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": media_type,
+                                "data": encoded_image
+                            }
+                        },
+                        {
+                            "type": "text", 
+                            "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output 'y' (without quotes). If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
+        )
+        resp = rr.content[0].text
+        if resp[0] != 'Y': return resp
 
-    ta = analist_asst(encoded_image, media_type)
+        ta = analist_asst(encoded_image, media_type)
 
-    return ta
+        return ta
         
 
 def analist_asst(encoded_image, media_type):
-    analysis_resp = client.messages.create(
-        model="claude-3-haiku-20240307",
-        # model="claude-3-sonnet-20240229",
-        # model="claude-3-opus-20240229",
-        max_tokens=3000,
-        temperature=1,
-        system=pp,
-        messages=[{"role": "user", "content": [
-                    {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
-                    {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
-    )
-    text = analysis_resp.content[0].text
-    # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
-    # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
-    key_chart_info = get_tag("key chart inf", text)
-    expected_market_behaviour = get_tag("expected market behaviour", text)
-    prediction_and_confidence = get_tag("prediction and confidence", text)
-    invalidation_conditions = get_tag("invalidation conditions", text)
-    final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
+    if encoded_image:
+        analysis_resp = client.messages.create(
+            model="claude-3-haiku-20240307",
+            # model="claude-3-sonnet-20240229",
+            # model="claude-3-opus-20240229",
+            max_tokens=3000,
+            temperature=1,
+            system=pp,
+            messages=[{"role": "user", "content": [
+                        {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
+                        {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
+        )
+        text = analysis_resp.content[0].text
+        # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
+        # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+        key_chart_info = get_tag("key chart inf", text)
+        expected_market_behaviour = get_tag("expected market behaviour", text)
+        prediction_and_confidence = get_tag("prediction and confidence", text)
+        invalidation_conditions = get_tag("invalidation conditions", text)
+        final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
-    return final
+        return final
 
 
