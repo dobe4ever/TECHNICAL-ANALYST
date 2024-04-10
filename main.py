@@ -24,8 +24,7 @@ def main():
         with st.spinner("Doing technical analysis..."):
             encoded_image, media_type = encode_img(photo)
             if encoded_image:
-                img_data = img_class_asst(encoded_image, media_type)
-                ta = analist_asst(img_data)
+                ta = img_class_asst(encoded_image, media_type)
                 data_to_telegram(ta, photo)
                 st.success("Success!")
                 st.markdown("### Response:")

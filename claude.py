@@ -9,7 +9,7 @@ img_sys = """
 You are an AI assistant answering 'yes' or 'no' questions for image classification
 </role>
 <question>
-Is the image below an image of a chart? (y/n)
+Is the image below an image of a chart? Output 'y' or 'n' only.
 </question>
 """
 
@@ -70,16 +70,9 @@ def img_class_asst(encoded_image, media_type):
             ]
         )
         res = r.content[0].text
-        if 'y' not in res:
+        if "y" or "Y" not in res:
             return "Only images of charts accepted. Try again."
-        else:
-            return encoded_image, media_type
-    else:
-        return "No image uploaded."
-    
-
-def analist_asst(encoded_image, media_type):
-    if encoded_image:
+        
         an = client.messages.create(
             model="claude-3-haiku-20240307",
             # model="claude-3-sonnet-20240229",
@@ -115,5 +108,7 @@ def analist_asst(encoded_image, media_type):
         return final
     else:
         return "No image uploaded."
+    
 
-
+    
+    
