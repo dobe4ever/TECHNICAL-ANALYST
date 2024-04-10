@@ -42,25 +42,25 @@ Otherwhise, respond with a brief constructive critique of the issues preventing 
 # </task> """
 
 
-prompt_analyze = """ 
-<context> 
-Unbiased technical analysis
-</context> 
-<role> 
-You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
-</role> 
-<task> 
-From the provided chart, extract key technical data & what it suggest. 
-Based on your deep understanding of technical analysis concepts, principles, and indicators, extract key technical data from the provided chart. Do not include any data not explicitly seen on the chart.
-Answer with as much detail as possible:
- --what do you expect to happen next (expected market behaviour)
- --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
- --based on what (concept/theory behind your predictions)
- --how probable (confidence level)
- --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
- --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
-</task> 
-"""
+# prompt_analyze = """ 
+# <context> 
+# Unbiased technical analysis
+# </context> 
+# <role> 
+# You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
+# </role> 
+# <task> 
+# From the provided chart, extract key technical data & what it suggest. 
+# Based on your deep understanding of technical analysis concepts, principles, and indicators, extract key technical data from the provided chart. Do not include any data not explicitly seen on the chart.
+# Answer with as much detail as possible:
+#  --what do you expect to happen next (expected market behaviour)
+#  --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
+#  --based on what (concept/theory behind your predictions)
+#  --how probable (confidence level)
+#  --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
+#  --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
+# </task> 
+# """
 
     # <interpret>
     # Draw upon your deep understanding of technical analysis concepts, principles, and indicators to generate a comprehensive assessment of the asset's price action, obvious patterns, trends, and potential future behavior. Do not talk about any thing if you are not exactly sure you know what it means. 
@@ -71,6 +71,25 @@ Answer with as much detail as possible:
     # <recommendations>
     # Recommended trading strategies for different traders with different personal situations. 
     # </recommendations>
+
+prompt_analyze = """ 
+<context> 
+Unbiased technical analysis
+</context> 
+<role> 
+You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
+</role> 
+<task> 
+Respond with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators, considering only the available data explicitly seen on the provided chart:
+ --what do you expect to happen next (expected market behaviour)
+ --when will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
+ --based on what (concept/theory behind your predictions)
+ --how probable (confidence level)
+ --when to consider it no longer a valid prediction (specific date/time, price level, condition met) & why.
+ --if no clear signals in the chart, what would you need to see before leaning to a particular prediction.
+</task> 
+"""
+
 
 def analyze(encoded_image, media_type):
     is_chart_resp = client.messages.create(
