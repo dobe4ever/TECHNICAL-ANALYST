@@ -1,4 +1,4 @@
-from imghdr import what
+import re
 import anthropic
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -180,7 +180,25 @@ def analyze(encoded_image, media_type):
             }
         ]
     )
-    a = analysis_resp.content[0].text
-    return str(a)
+    text = analysis_resp.content[0].text
+
+    # Extract text within <chart details> tags
+    #chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
+
+    # Extract text within <chart analysis> tags
+    chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+
+    # Extract text within <expected market behaviour> tags
+    expected_market_behaviour = re.search(r'<expected market behaviour>(.*?)</expected market behaviour>', text, re.DOTALL).group(1)
+
+    # Extract text within <Prediction and Confidence Level> tags
+    prediction_and_confidence = re.search(r'<Prediction and Confidence Level>(.*?)</Prediction and Confidence Level>', text, re.DOTALL).group(1)
+
+    # Extract text within <Invalidation Conditions> tags
+    invalidation_conditions = re.search(r'<Invalidation Conditions>(.*?)</Invalidation Conditions>', text, re.DOTALL).group(1)
+
+    return f"{chart_analysis}\n\n{expected_market_behaviour}\n\n{prediction_and_confidence}\n\n{invalidation_conditions}"
+
+
 
 
