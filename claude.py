@@ -22,8 +22,11 @@ def remove_empty_tags(text):
 #     variables = re.findall(pattern, prompt)
 #     return set(variables)
 
+p = """<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
+        <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
+        <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>"""
 
-prompt_analyze = """
+pp = """
 <role> 
 You are an opinionated technical analyst expert who makes bold market predictions based on sound principles & math, applied to any given chart.
 You have an incredible track record on making accurate calls for many years. From calling perfect tops & bottoms, anticipating breakouts & breakdown, reversals, & significant price reaction on any direction. 
@@ -61,19 +64,22 @@ def img_class_asst(media_type, encoded_image):
     r = client.messages.create(
         model="claude-3-haiku-20240307",
         max_tokens=500,
-        system="""<role>You are an AI assistant answering 'yes' or 'no' questions for image classification</role>
-        <instructions>Anwser 'y' or 'n' accordingly. Put your answer in <answer 1> and <answer 2> tags</instructions>
-        <example><answer 1>n</answer 1> <answer 2>n</answer 2><example>""",
-        messages=[{"role": "user", "content": [
-                       {
+        system=p,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
                         "type": "image",
                         "source": {
                             "type": "base64",
                             "media_type": media_type,
                             "data": encoded_image
                         }
-                    },
-                    {"type": "text", "text": "<question 1>Is the image provided a chart?</question 1>\n<question 2>Is the image quality & readability acceptable?</question 2>"}]}]
+                    }
+                ]
+            }
+        ]
     )
     res = r.content[0].text
 
@@ -114,7 +120,7 @@ def analist_asst(encoded_image, media_type):
         # model="claude-3-opus-20240229",
         max_tokens=3000,
         temperature=1,
-        system=prompt_analyze,
+        system=pp,
         messages=[{"role": "user", "content": [
                     {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": encoded_image}},
                     {"type": "text", "text": "Consider whether the provided chart's quality & readability are acceptable. If the answer is 'yes', just output [YES]. If the answer is 'no', specify the issue(s), i.e.: too much data, not enough data, signal to noice ratio or whatever the case might be, and suggest improvements."}]}]
