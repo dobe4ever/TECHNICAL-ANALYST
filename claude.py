@@ -78,14 +78,15 @@ prompt_analyze = """
 Unbiased technical analysis
 </context> 
 <role> 
-You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data. 
+You are an opinionated technical analyst who makes bold market predictions by applying sound principles & math on any given chart data that's presented to you. 
 </role> 
 <task> 
-Respond the questions with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators. Only use factual data from the chart itself. If no data can be found to answer a specific question, skip that question or part of the question.
+Respond the questions about the chart provided by the user with as much detail as possible based on your deep understanding of technical analysis concepts, principles, and indicators.
+Do not discuss anything not explicitly seen on the chart. If the chart is insufficient to answer a specific question, skip that question or part of the question.
 </task> 
 <questions>
-- Whats this chart? (basic chart info)
-- What's your chart analysis? (Based on significant data)
+- What's the chart details? (Do not leave any details un-narrated)
+- What's your chart analysis? (Use visual references and values as seen on the chart to guide the user's eyes to the relevant area of the chart being discussed)
 - What do you expect to happen next (expected market behaviour)
 - When will it happen (already in progress, at future date/time, at specific price level, after specific condition met)
 - Based on what (concept/theory behind your predictions)
@@ -94,7 +95,6 @@ Respond the questions with as much detail as possible based on your deep underst
 - If no clear signals in the chart, what would you need to see before leaning to a particular prediction.
 </questions>
 """
-
 
 def analyze(encoded_image, media_type):
     is_chart_resp = client.messages.create(
