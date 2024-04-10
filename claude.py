@@ -73,7 +73,7 @@ def img_class_asst(encoded_image, media_type):
     print(f"'Y' is not in the string: {res}")
 
     if "y" or "Y" not in res:
-        return "Only images of charts accepted. Try again."
+        return f"'Y' is not in the string: {res}\n\nOnly images of charts accepted. Try again."
     
     an = client.messages.create(
         model="claude-3-haiku-20240307",
