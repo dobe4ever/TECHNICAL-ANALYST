@@ -80,8 +80,8 @@ def img_class_asst(encoded_image, media_type):
         ]
     )
     text = r.content[0].text
-    a = get_tag("answers", text, strip=False)
-    return a
+    a = get_tag("answers", text)
+    return text, a
     
 
 
