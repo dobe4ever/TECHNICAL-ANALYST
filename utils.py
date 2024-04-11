@@ -59,3 +59,12 @@ def remove_empty_tags(text):
 #     pattern = r'{([^}]+)}'
 #     variables = re.findall(pattern, prompt)
 #     return set(variables)
+
+    # text = remove_empty_tags(t)
+    # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
+    # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
+    # key_chart_info = get_tag("key chart inf", text, strip=True)
+    # expected_market_behaviour = get_tag("expected market behaviour", text, strip=True)
+    # prediction_and_confidence = get_tag("prediction and confidence", text, strip=True)
+    # invalidation_conditions = get_tag("invalidation conditions", text, strip=True)
+    # final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"

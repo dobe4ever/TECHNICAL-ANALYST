@@ -55,32 +55,7 @@ Output a list of objects for the answers, in the same fashion as the list of que
 """
 
 def img_class_asst(encoded_image, media_type):
-    # if encoded_image:
     r = client.messages.create(
-        model="claude-3-haiku-20240307",
-        max_tokens=10,
-        temperature=0.2,
-        system=img_sys,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": encoded_image
-                        }
-                    }
-                ]
-            }
-        ]
-    )
-    if 'y' not in r.content[0].text:
-        return "Only images of charts accepted. Try again."
-    
-    an = client.messages.create(
         model="claude-3-haiku-20240307",
         # model="claude-3-sonnet-20240229",
         # model="claude-3-opus-20240229",
@@ -103,16 +78,7 @@ def img_class_asst(encoded_image, media_type):
             }
         ]
     )
-    # text = remove_empty_tags(t)
-    # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
-    # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
-    # key_chart_info = get_tag("key chart inf", text, strip=True)
-    # expected_market_behaviour = get_tag("expected market behaviour", text, strip=True)
-    # prediction_and_confidence = get_tag("prediction and confidence", text, strip=True)
-    # invalidation_conditions = get_tag("invalidation conditions", text, strip=True)
-    # final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
-
-    return an.content[0].text
+    return r.content[0].text
     
 
 
