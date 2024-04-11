@@ -80,10 +80,10 @@ def img_class_asst(encoded_image, media_type):
         ]
     )
     text = r.content[0].text
-    if '<answers>' in text and '</answers>' in text:
-        text = text.replace('<answers>', '')
-        text = text.replace('</answers>', '')
-        return text
+    # if '<answers>' in text and '</answers>' in text:
+    #     text = text.replace('<answers>', '')
+    #     text = text.replace('</answers>', '')
+    return text
     
 
 
