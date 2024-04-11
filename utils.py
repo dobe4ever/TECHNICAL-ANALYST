@@ -42,11 +42,11 @@ def data_to_telegram(response, photo):
         requests.post(text_url, json=payload)
 
 
-def get_tag(tag: str, string: str, strip: bool = False) -> list[str]:
-    ext_list = re.findall(f"<{tag}>(.+?)</{tag}>", string, re.DOTALL)
+def get_tag(tag, string, strip=False):
+    t = re.findall(f"<{tag}>(.?)</{tag}>", string, re.DOTALL)
     if strip:
-        ext_list = [e.strip() for e in ext_list]
-    return ext_list
+        t = [e.strip() for e in t]
+    return t
 
 def remove_empty_tags(text):
     return re.sub(r'<(\w+)></\1>$', '', text)

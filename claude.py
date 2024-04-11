@@ -1,4 +1,5 @@
 import anthropic
+import re
 from utils import remove_empty_tags, get_tag
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -78,7 +79,9 @@ def img_class_asst(encoded_image, media_type):
             }
         ]
     )
-    return r.content[0].text
+    text = r.content[0].text
+    a = get_tag("answers", text, strip=False)
+    return a
     
 
 
