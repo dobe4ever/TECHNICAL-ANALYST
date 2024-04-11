@@ -25,25 +25,7 @@ def encode_img(photo):
 
 
 
-# def data_to_telegram(response, photo):
-#     # Send the photo first
-#     photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
-#     files = {"photo": photo.getvalue()}
-#     payload = {"chat_id": "-4158249275"}
-#     photo_response = requests.post(photo_url, data=payload, files=files)
-
-#     if photo_response.status_code == 200:
-#         # If photo sent successfully, send the text
-#         text_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-#         payload = {
-#             "chat_id": "-4158249275",
-#             "text": response
-#         }
-#         requests.post(text_url, json=payload)
-
-
-
-def data_to_telegram(response, photo, audio="audio.mp3"):
+def data_to_telegram(response, photo):
     # Send the photo first
     photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
     files = {"photo": photo.getvalue()}
@@ -59,17 +41,7 @@ def data_to_telegram(response, photo, audio="audio.mp3"):
         }
         requests.post(text_url, json=payload)
 
-        # Send the audio
-        audio_url = f"https://api.telegram.org/bot{bot_token}/sendAudio"
-        files = {"audio": audio.getvalue()}
-        audio_response = requests.post(audio_url, data=payload, files=files)
 
-        if audio_response.status_code == 200:
-            print("Photo, text, and audio sent successfully!")
-        else:
-            print("Failed to send audio.")
-    else:
-        print("Failed to send photo.")        
 
 
 
