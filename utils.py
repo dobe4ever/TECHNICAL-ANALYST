@@ -43,7 +43,7 @@ def data_to_telegram(response, photo):
 
 
 def get_tag(tag, string, strip=True):
-    t = re.findall(f"<{tag}>(.?)</{tag}>", string, re.DOTALL).group(1)
+    t = re.findall(f"<{tag}>(.?)</{tag}>", string, re.DOTALL)
     if strip:
         t = [e.strip() for e in t]
     return t

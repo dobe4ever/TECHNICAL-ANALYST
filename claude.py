@@ -1,6 +1,6 @@
 import anthropic
 import re
-from utils import remove_empty_tags, get_tag
+from utils import get_tag
 
 # Defaults to os.environ.get("ANTHROPIC_API_KEY")
 client = anthropic.Anthropic()
@@ -61,7 +61,7 @@ def img_class_asst(encoded_image, media_type):
         # model="claude-3-sonnet-20240229",
         # model="claude-3-opus-20240229",
         max_tokens=3000,
-        temperature=1,
+        temperature=0.1,
         system=analist_sys,
         messages=[
             {
@@ -80,8 +80,10 @@ def img_class_asst(encoded_image, media_type):
         ]
     )
     text = r.content[0].text
-    a = get_tag("answers", text)
-    return text, a
+    if '<answers>' in text and '</answers>' in text:
+        text = text.replace('<answers>', '')
+        text = text.replace('</answers>', '')
+        return text
     
 
 
