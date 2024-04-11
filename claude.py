@@ -13,36 +13,44 @@ Is the image below an image of a chart? Output 'y' or 'n' only (no quotes).
 </question>
 """
 
+questions = [
+    {
+        "chart_details": "What are the chart details? (Only discuss details that you can see on the actual chart. Gather as much key/value data as possible. Specify the last recorded values from every chart element where it applies."
+    },
+    {
+        "chart_analysis": "What's your chart analysis? (Comprehensive technical analysis assessment of the chart, one element at a time & what they each suggest)"
+    },
+    {
+        "key_chart_info": "From your chart analysis above, what's the most significant info & key takeaways."
+    },
+    {
+        "expected_market_behaviour": "What do you expect to happen next (x price action/reaction) & when (I.e.: Already in progress, at a specific future time, at specific price level, after specific condition is met etc)"
+    },
+    {
+        "prediction_and_confidence": "Concept/theory behind your prediction(s) & probability level."
+    },
+    {
+        "invalidation_conditions": "When to consider it no longer a valid prediction (I.e.: At a specific date/time, above/below a specific price level, if certain condition is met etc) & why."
+    }
+]
+
+
 analist_sys = """
 <role> 
 You are an opinionated technical analyst expert who makes bold market predictions based on sound principles & math, applied to any given chart.
 You have an incredible track record on making accurate calls for many years. From calling perfect tops & bottoms, anticipating breakouts & breakdowns, reversals, & significant price reaction on any direction. 
 What you don't do is give trading advice or even suggest an appropiate course of action, that's very personal & the specifics will vary from person to person, & you don't consider any of that, all you consider is the given chart in fromt of you, and universal TA rules. You share your predictions & asses them a probability score, without discussing specific strategies or trading signals, people can use this info as they see fit.
 </role>  
-
 <task> 
 Today you will be responding questions about random charts provided by users. Draw upon your deep understanding of technical analysis concepts, principles, and indicators.
-
 If a given question cannot be answered by the chart, skip the question or part of the question.
-
 Use visual descriptions & other references from the chart to guide the user's eyes to the areas of the chart you are discussing.
-
 If there aren't strong enough signals in the current chart, explain why the current signals are not good & what would you need to see before leaning to a particular prediction.
-</task> 
+</task>
 
+Output a list of objects for the answers, in the same fashion as the list of questions below. Keep the same keys, just rewrite the values:
 <questions>
-
-1: What are the chart details? (Only discuss details that you can see on the actual chart. Gather as much key/value data as possible. Specify the last recorded values from every chart element where it applies. Put your answer in <chart details> tags.
-
-2: What's your chart analysis? (Comprehensive technical analysis assesement of the chart, one element at a time & what they each suggest) Put your answer in <chart analysis> tags.
-
-3: From your chart analysis above, what's the most significant info & key take aways. Put your answer in <key chart info> tags.
-
-4: What do you expect to happen next (x price action/reaction) & when (I.e.: Already in progress, at a specific future time, at specific price level, after specific condition is met etc) Put your answer in <expected market behaviour> tags.
-
-5: Concept/theory behind your prediction(s) & probability level. Put your answer in <prediction and confidence level> tags.
-
-6: When to consider it no longer a valid prediction (I.e.: At a specific date/time, above/below a specific price level, if certain condition is met etc) & why. Put your answer in <invalidation conditions> tags.
+{questions}
 </questions>
 """
 
@@ -95,17 +103,16 @@ def img_class_asst(encoded_image, media_type):
             }
         ]
     )
-    t = an.content[0].text
-    text = remove_empty_tags(t)
+    # text = remove_empty_tags(t)
     # chart_details = re.search(r'<chart details>(.*?)</chart details>', text, re.DOTALL).group(1)
     # chart_analysis = re.search(r'<chart analysis>(.*?)</chart analysis>', text, re.DOTALL).group(1)
-    key_chart_info = get_tag("key chart inf", text, strip=True)
-    expected_market_behaviour = get_tag("expected market behaviour", text, strip=True)
-    prediction_and_confidence = get_tag("prediction and confidence", text, strip=True)
-    invalidation_conditions = get_tag("invalidation conditions", text, strip=True)
-    final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
+    # key_chart_info = get_tag("key chart inf", text, strip=True)
+    # expected_market_behaviour = get_tag("expected market behaviour", text, strip=True)
+    # prediction_and_confidence = get_tag("prediction and confidence", text, strip=True)
+    # invalidation_conditions = get_tag("invalidation conditions", text, strip=True)
+    # final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
 
-    return text, final
+    return an.content[0].text
     
 
 
