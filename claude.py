@@ -59,7 +59,7 @@ def img_class_asst(encoded_image, media_type):
     r = client.messages.create(
         model="claude-3-haiku-20240307",
         max_tokens=10,
-        temperature=0,
+        temperature=1.5,
         system=img_sys,
         messages=[
             {
