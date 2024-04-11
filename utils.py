@@ -25,7 +25,25 @@ def encode_img(photo):
 
 
 
-def data_to_telegram(response, photo):
+# def data_to_telegram(response, photo):
+#     # Send the photo first
+#     photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+#     files = {"photo": photo.getvalue()}
+#     payload = {"chat_id": "-4158249275"}
+#     photo_response = requests.post(photo_url, data=payload, files=files)
+
+#     if photo_response.status_code == 200:
+#         # If photo sent successfully, send the text
+#         text_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+#         payload = {
+#             "chat_id": "-4158249275",
+#             "text": response
+#         }
+#         requests.post(text_url, json=payload)
+
+
+
+def data_to_telegram(response, photo, audio="audio.mp3"):
     # Send the photo first
     photo_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
     files = {"photo": photo.getvalue()}
@@ -40,6 +58,19 @@ def data_to_telegram(response, photo):
             "text": response
         }
         requests.post(text_url, json=payload)
+
+        # Send the audio
+        audio_url = f"https://api.telegram.org/bot{bot_token}/sendAudio"
+        files = {"audio": audio.getvalue()}
+        audio_response = requests.post(audio_url, data=payload, files=files)
+
+        if audio_response.status_code == 200:
+            print("Photo, text, and audio sent successfully!")
+        else:
+            print("Failed to send audio.")
+    else:
+        print("Failed to send photo.")        
+
 
 
 def get_tag(tag, string, strip=True):
@@ -68,3 +99,8 @@ def remove_empty_tags(text):
     # prediction_and_confidence = get_tag("prediction and confidence", text, strip=True)
     # invalidation_conditions = get_tag("invalidation conditions", text, strip=True)
     # final = f"{key_chart_info}{expected_market_behaviour}{prediction_and_confidence}{invalidation_conditions}"
+
+
+        # if '<answers>' in text and '</answers>' in text:
+    #     text = text.replace('<answers>', '')
+    #     text = text.replace('</answers>', '')
